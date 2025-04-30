@@ -38,11 +38,12 @@ public class ProdutoController {
  
 
     @GetMapping("/find/{id}")
-    public ProdutoResponseDTO getProdutoById(@PathVariable("id") Long id) {
+    public ResponseEntity<?> getProdutoById(@PathVariable("id") Long id) {
         try {
-            return produtoService.findById(id);
+            ProdutoResponseDTO produto = produtoService.findById(id);
+            return ResponseEntity.ok(produto);
         } catch (ResourceNotFoundException e) {
-            return null; 
+            return ResponseEntity.status(404).body("Produto com ID " + id + " não encontrado.");
         }
     }
 
