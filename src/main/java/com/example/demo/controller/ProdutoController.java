@@ -19,6 +19,8 @@ import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.service.ProdutoService;
 
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 
 @RestController
@@ -37,17 +39,25 @@ public class ProdutoController {
     }
  
 
-    @GetMapping("/find/{id}")
+    @GetMapping("/find/id/{id}")
     public ResponseEntity<?> getProdutoById(@PathVariable("id") Long id) {
         try {
             ProdutoResponseDTO produto = produtoService.findById(id);
             return ResponseEntity.ok(produto);
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(404).body("Produto com ID " + id + " não encontrado.");
-        }
+        } 
     }
-
-    @GetMapping("/find/{nome}")
+    @GetMapping("/find/categoria/{categoria}")
+    public ResponseEntity<ProdutoResponseDTO> getProdutoByCategoria(@PathVariable String categoria) throws ResourceNotFoundException {
+        ProdutoResponseDTO produtoResponseDTO = produtoService.findByCategoria(categoria);
+        return ResponseEntity.ok(produtoResponseDTO);
+    }
+    public String getMethodName(@RequestParam String param) {
+        return new String();
+    }
+    
+    @GetMapping("/find/nome/{nome}")
     public ResponseEntity<ProdutoResponseDTO> getProdutoByNome(@PathVariable String nome) throws ResourceNotFoundException {
         ProdutoResponseDTO produtoResponseDTO = produtoService.findProdutoByNome(nome);
         return ResponseEntity.ok(produtoResponseDTO);
@@ -59,18 +69,18 @@ public class ProdutoController {
         produtoService.InsertProduto(produtoRequestDTO);
     }
 
-    @PutMapping("/update/{id}")
+    @PutMapping("/update/id/{id}")
     public ProdutoRequestDTO updateById(@PathVariable Long id, @RequestBody ProdutoRequestDTO updatedProduto) throws ResourceNotFoundException {
         return produtoService.updateById(id, updatedProduto);
     }
 
-    @PutMapping("/update/{name}")
-    public ProdutoRequestDTO updateByNome(@PathVariable String nome, @RequestBody ProdutoRequestDTO updatedProduto) throws ResourceNotFoundException {
+    @PutMapping("/update/name/{nome}")
+    public ProdutoRequestDTO updateByNome(@PathVariable ("nome")String nome, @RequestBody ProdutoRequestDTO updatedProduto) throws ResourceNotFoundException {
         return produtoService.updateByNome(nome, updatedProduto);
     }
 
 // Delete
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/delete/id/{id}")
     public void deleteProdutoById(@PathVariable("id") Long id) {
         try {
             produtoService.deleteById(id);
@@ -79,7 +89,7 @@ public class ProdutoController {
         }
     }
     
-    @DeleteMapping("/delete/{nome}")
+    @DeleteMapping("/delete/nome/{nome}")
     public void deleteProdutoByNome(@PathVariable("nome") String nome) {
         try {
             produtoService.deleteByNome(nome);

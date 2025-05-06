@@ -98,6 +98,18 @@ public class ProdutoService {
         return modelMapper.map(opProduto,ProdutoResponseDTO.class);
     }
 
+    public ProdutoResponseDTO findByCategoria(String categoria) throws ResourceNotFoundException {
+        Produto produto = produtoRepository.findByCategoria(categoria);
+        
+        if (produto == null) {
+            throw new ResourceNotFoundException("Nenhum produto com a categoria " + categoria + " foi encontrado no estoque");
+        }
+
+       return modelMapper.map(produto,ProdutoResponseDTO.class);
+    
+    }	
+    
+
 
 //Delete
 

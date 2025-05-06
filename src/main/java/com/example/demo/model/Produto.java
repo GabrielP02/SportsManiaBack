@@ -33,6 +33,18 @@ public class Produto {
     @JoinColumn(name = "estoque_id")
     @JsonIgnore
     private Estoque estoque;
+    
+    @Column(length = 100)
+    private String imagem;
+   
+    @Column(length = 300)
+    private String descricao;
+    
+    @Column(length = 50)
+    private String categoria;
+    
+    @Column(length = 50)
+    private String tamanho;
 
     @ManyToOne
     @JoinColumn(name = "compra_id")

@@ -13,4 +13,8 @@ public class ProdutoResponseDTO {
     private String nome;
     private Double preco;
     private int quantidade;
+    private String imagem;
+    private String descricao;
+    private String categoria;
+    private String tamanho;
 }
