@@ -34,10 +34,10 @@ public class Produto {
     @JsonIgnore
     private Estoque estoque;
     
-    @Column(length = 100)
+    @Column(length = 500)
     private String imagem;
    
-    @Column(length = 300)
+    @Column(length = 1000)
     private String descricao;
     
     @Column(length = 50)
