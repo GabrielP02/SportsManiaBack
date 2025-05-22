@@ -11,4 +11,5 @@ import com.example.demo.model.Person;
 public interface PersonRepository extends JpaRepository<Person, Long> {
     Person findByUsernameAndPassword(String username, String password);
     Person findByUsername(String username);
+    Person findByEmail(String email);
 }

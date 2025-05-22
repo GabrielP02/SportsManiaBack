@@ -39,5 +39,11 @@ public class PersonController {
     public Person getPersonById(@PathVariable Long id) {
         return personService.getPersonById(id);
     }
+
+    
+    @GetMapping("/email/{email}")
+    public Person getPersonByEmail(@PathVariable String email) {
+        return personService.findByEmail(email);
+    }
 }
 

@@ -26,7 +26,8 @@ public class Person {
     private String username;
     @Column
     private String password;
-
+    @Column(unique = true, nullable = false)
+    private String email;
     private PersonType personType;
 
     // Getters and Setters
@@ -37,6 +38,14 @@ public class Person {
 
     public String getPassword() {
         return this.password;
+    }
+
+    public String getEmail() {
+        return this.email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }
 

@@ -38,7 +38,7 @@ public class ProdutoService {
 
     public ProdutoRequestDTO updateByNome(String nome, ProdutoRequestDTO produtoRequestDTO)throws ResourceNotFoundException {
         Produto existingProduto = produtoRepository.findByNome(nome);
-        if (existingProduto == null) {      
+        if (existingProduto == null) {
             throw new ResourceNotFoundException("Produto com o nome " + nome + " não existe.");
         } 
         
@@ -48,9 +48,9 @@ public class ProdutoService {
     }
 
     public ProdutoRequestDTO updateById(Long id, ProdutoRequestDTO produtoRequestDTO) throws ResourceNotFoundException {
-       
+
         Optional<Produto> existingProduto = produtoRepository.findById(id);
-        if (existingProduto.isEmpty()) {      
+        if (existingProduto.isEmpty()) {
             throw new ResourceNotFoundException("Produto com o id: " + id + " não existe.");
         } 
         
@@ -80,7 +80,7 @@ public class ProdutoService {
             throw new ResourceNotFoundException("Nenhum produto com o nome " + nome + " foi encontrado no estoque");
         }
 
-       return modelMapper.map(produto,ProdutoResponseDTO.class);
+        return modelMapper.map(produto,ProdutoResponseDTO.class);
     
     }
 
@@ -105,9 +105,9 @@ public class ProdutoService {
             throw new ResourceNotFoundException("Nenhum produto com a categoria " + categoria + " foi encontrado no estoque");
         }
 
-       return modelMapper.map(produto,ProdutoResponseDTO.class);
+        return modelMapper.map(produto,ProdutoResponseDTO.class);
     
-    }	
+    }
     
 
 
