@@ -27,7 +27,11 @@ public class Carrinho {
     private List<Produto> produtos;
 
     @OneToOne
-    @JoinColumn(name = "cliente_id")
+    @JoinColumn(name = "person_id")
     @JsonIgnore
-    private Cliente cliente;
+    private Person person;
+
+    public List<Produto> getProdutos() {
+        return produtos;
+    }
 }

@@ -36,5 +36,9 @@ public class Cliente {
        @OneToMany(mappedBy = "cliente")
         @JsonIgnore
         private List<Venda> venda;
+
+    public String getNome(){
+        return nome;
+    }    
     
 }

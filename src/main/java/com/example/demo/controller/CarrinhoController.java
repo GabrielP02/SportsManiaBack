@@ -11,40 +11,46 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.modelmapper.ModelMapper;
 
 @RestController
 @RequestMapping("/api/carrinho")
-@SecurityRequirement(name = "Bearer")
 public class CarrinhoController {
 
     @Autowired
     private CarrinhoService carrinhoService;
 
-    // Buscar carrinho por cliente
-    @GetMapping("/cliente/{clienteId}")
-    public ResponseEntity<CarrinhoResponseDTO> getCarrinhoByCliente(@PathVariable Long clienteId) throws ResourceNotFoundException {
-        CarrinhoResponseDTO carrinhoResponseDTO = carrinhoService.findCarrinhoByCliente(clienteId);
-        return ResponseEntity.ok(carrinhoResponseDTO);
-    }
+    @Autowired
+    private ModelMapper modelMapper;
 
-    // Adicionar produto ao carrinho do cliente
-    @PostMapping("/cliente/{clienteId}/adicionar")
-    public ResponseEntity<Carrinho> adicionarProdutoCarrinho(@PathVariable Long clienteId, @RequestBody Produto produto) throws ResourceNotFoundException {
-        Carrinho carrinho = carrinhoService.adicionarProdutoCarrinho(clienteId, produto);
+    // Buscar carrinho por person
+    @GetMapping("/person/{personId}")
+    public ResponseEntity<Carrinho> getCarrinhoByPerson(@PathVariable Long personId) throws ResourceNotFoundException {
+        Carrinho carrinho = carrinhoService.findCarrinhoByPersonId(personId);
         return ResponseEntity.ok(carrinho);
     }
 
-    // Remover produto do carrinho do cliente
-    @DeleteMapping("/cliente/{clienteId}/remover")
-    public ResponseEntity<Carrinho> removerProdutoCarrinho(@PathVariable Long clienteId, @RequestBody Produto produto) throws ResourceNotFoundException {
-        Carrinho carrinho = carrinhoService.removerProdutoCarrinho(clienteId, produto);
+    // Adicionar produto ao carrinho da person
+    @PostMapping("/person/{personId}/adicionar")
+    public ResponseEntity<CarrinhoResponseDTO> adicionarProdutoCarrinho(
+            @PathVariable Long personId,
+            @RequestParam Long produtoId) throws ResourceNotFoundException {
+        Carrinho carrinho = carrinhoService.adicionarProdutoCarrinho(personId, produtoId);
+        CarrinhoResponseDTO dto = modelMapper.map(carrinho, CarrinhoResponseDTO.class);
+        return ResponseEntity.ok(dto);
+    }
+
+    // Remover produto do carrinho da person
+    @DeleteMapping("/person/{personId}/remover")
+    public ResponseEntity<Carrinho> removerProdutoCarrinho(@PathVariable Long personId, @RequestBody Produto produto) throws ResourceNotFoundException {
+        Carrinho carrinho = carrinhoService.removerProdutoCarrinho(personId, produto);
         return ResponseEntity.ok(carrinho);
     }
 
-    // Finalizar compra do carrinho do cliente
-    @PostMapping("/cliente/{clienteId}/finalizar")
-    public ResponseEntity<Carrinho> finalizarCompra(@PathVariable Long clienteId) throws ResourceNotFoundException {
-        Carrinho carrinho = carrinhoService.finalizarCompra(clienteId);
+    // Finalizar compra do carrinho da person
+    @PostMapping("/person/{personId}/finalizar")
+    public ResponseEntity<Carrinho> finalizarCompra(@PathVariable Long personId) throws ResourceNotFoundException {
+        Carrinho carrinho = carrinhoService.finalizarCompra(personId);
         return ResponseEntity.ok(carrinho);
     }
 }

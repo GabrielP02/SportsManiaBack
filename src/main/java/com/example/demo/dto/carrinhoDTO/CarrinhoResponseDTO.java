@@ -21,5 +21,6 @@ public class CarrinhoResponseDTO {
     
     private Long id; 
     private List<Produto> produtos;
-    private Cliente cliente;     
+    private Cliente cliente;
+         
 }

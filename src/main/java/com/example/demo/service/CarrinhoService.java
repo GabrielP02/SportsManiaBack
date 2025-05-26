@@ -5,12 +5,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.dto.carrinhoDTO.CarrinhoResponseDTO;
-import com.example.demo.dto.clienteDTO.ClienteResponseDTO;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.model.Carrinho;
-import com.example.demo.model.Cliente;
+import com.example.demo.model.Person;
 import com.example.demo.model.Produto;
 import com.example.demo.repository.CarrinhoRepository;
+import com.example.demo.repository.PersonRepository;
+import com.example.demo.repository.ProdutoRepository;
 
 @Service
 public class CarrinhoService {
@@ -19,91 +20,74 @@ public class CarrinhoService {
     private CarrinhoRepository carrinhoRepository;
 
     @Autowired
-    private ClienteService clienteService; 
+    private PersonRepository personRepository;
 
-        private final ModelMapper modelMapper;
+    @Autowired
+    private ProdutoRepository produtoRepository;
+
+    private final ModelMapper modelMapper;
 
     CarrinhoService(ModelMapper modelMapper){
         this.modelMapper = modelMapper;
     }
 
-    // Buscar carrinho por cliente
-    public CarrinhoResponseDTO findCarrinhoByCliente(Long clienteId) throws ResourceNotFoundException {
-        ClienteResponseDTO cliente = clienteService.findClienteById(clienteId);
-        if (cliente == null) {
-            throw new ResourceNotFoundException("Cliente não encontrado com ID: " + clienteId);
-        }
+    // (POST) Adicionar produto ao carrinho de uma person
+    public Carrinho adicionarProdutoCarrinho(Long personId, Long produtoId) throws ResourceNotFoundException {
+        Person person = personRepository.findById(personId)
+            .orElseThrow(() -> new ResourceNotFoundException("Person não encontrada"));
 
-        CarrinhoResponseDTO carrinho = carrinhoRepository.findCarrinhoByCliente(cliente);
+        Produto produto = produtoRepository.findById(produtoId)
+            .orElseThrow(() -> new ResourceNotFoundException("Produto não encontrado"));
+
+        Carrinho carrinho = carrinhoRepository.findCarrinhoByPerson(person);
         if (carrinho == null) {
-            throw new ResourceNotFoundException("Nenhum carrinho encontrado para o cliente " + cliente.getNome());
+            carrinho = new Carrinho();
+            carrinho.setPerson(person);
         }
-
-        return new CarrinhoResponseDTO(carrinho.getCliente(), carrinho.getProdutos());
+        carrinho.getProdutos().add(produto);
+        return carrinhoRepository.save(carrinho);
     }
 
-    // (POST) Adicionar produto ao carrinho de um cliente
-    public Carrinho adicionarProdutoCarrinho(Long clienteId, Produto produto) throws ResourceNotFoundException {
-        ClienteResponseDTO cliente = clienteService.findClienteById(clienteId);
-        if (cliente == null) {
-            throw new ResourceNotFoundException("Cliente não encontrado com ID: " + clienteId);
-        }
+    // (DELETE) Remover produto do carrinho de uma person
+    public Carrinho removerProdutoCarrinho(Long personId, Produto produto) throws ResourceNotFoundException {
+        Person person = personRepository.findById(personId)
+            .orElseThrow(() -> new ResourceNotFoundException("Person não encontrada"));
 
-        CarrinhoResponseDTO carrinho = carrinhoRepository.findCarrinhoByCliente(cliente);
-
-        Carrinho carrinho1 = modelMapper.map(carrinho,Carrinho.class);
-        Cliente cliente1 = modelMapper.map(cliente,Cliente.class);
-        
-        if (carrinho1 == null) {
-            carrinho1 = new Carrinho();
-            carrinho1.setCliente(cliente1);
-        }
-
-        if (produto == null) {
-            throw new ResourceNotFoundException("Produto inválido");
-        }
-
-        carrinho.getProdutos().add(produto); // Adiciona o produto ao carrinho
-        return carrinhoRepository.save(carrinho1);
-    }
-
-    // (DELETE) Remover produto do carrinho de um cliente
-    public Carrinho removerProdutoCarrinho(Long clienteId, Produto produto) throws ResourceNotFoundException {
-        ClienteResponseDTO cliente = clienteService.findClienteById(clienteId);
-        if (cliente == null) {
-            throw new ResourceNotFoundException("Cliente não encontrado com ID: " + clienteId);
-        }
-
-        CarrinhoResponseDTO carrinho = carrinhoRepository.findCarrinhoByCliente(cliente);
-        Carrinho carrinho1 = modelMapper.map(carrinho,Carrinho.class);
-
+        Carrinho carrinho = carrinhoRepository.findCarrinhoByPerson(person);
         if (carrinho == null) {
-            throw new ResourceNotFoundException("Nenhum carrinho encontrado para o cliente " + cliente.getNome());
+            throw new ResourceNotFoundException("Nenhum carrinho encontrado para a person com ID: " + personId);
         }
 
         if (produto == null || !carrinho.getProdutos().contains(produto)) {
             throw new ResourceNotFoundException("Produto não encontrado no carrinho");
         }
 
-        carrinho.getProdutos().remove(produto); // Remove o produto do carrinho
-        return carrinhoRepository.save(carrinho1);
+        carrinho.getProdutos().remove(produto);
+        return carrinhoRepository.save(carrinho);
     }
 
-    // (PUT) Finalizar compra do carrinho de um cliente
-    public Carrinho finalizarCompra(Long clienteId) throws ResourceNotFoundException {
-        ClienteResponseDTO cliente = clienteService.findClienteById(clienteId);
-        Cliente cliente1 = modelMapper.map(cliente,Cliente.class);
-        if (cliente == null) {
-            throw new ResourceNotFoundException("Cliente não encontrado com ID: " + clienteId);
-        }
- 
-        Carrinho carrinho = carrinhoRepository.findCarrinhoByCliente(cliente1);
+    // (PUT) Finalizar compra do carrinho de uma person
+    public Carrinho finalizarCompra(Long personId) throws ResourceNotFoundException {
+        Person person = personRepository.findById(personId)
+            .orElseThrow(() -> new ResourceNotFoundException("Person não encontrada"));
+
+        Carrinho carrinho = carrinhoRepository.findCarrinhoByPerson(person);
         if (carrinho == null) {
-            throw new ResourceNotFoundException("Nenhum carrinho encontrado para o cliente " + cliente.getNome());
+            throw new ResourceNotFoundException("Nenhum carrinho encontrado para a person com ID: " + personId);
         }
 
-        // Limpa os produtos do carrinho após a finalização
-        carrinho.getProdutos().clear(); 
-        return carrinhoRepository.save(carrinho); // Salva o carrinho "limpo"
+        carrinho.getProdutos().clear();
+        return carrinhoRepository.save(carrinho);
+    }
+
+    public Carrinho findCarrinhoByPersonId(Long personId) throws ResourceNotFoundException {
+        Person person = personRepository.findById(personId)
+            .orElseThrow(() -> new ResourceNotFoundException("Person não encontrada"));
+
+        Carrinho carrinho = carrinhoRepository.findCarrinhoByPerson(person);
+        if (carrinho == null) {
+            throw new ResourceNotFoundException("Nenhum carrinho encontrado para a person com ID: " + personId);
+        }
+        return carrinho;
     }
 }

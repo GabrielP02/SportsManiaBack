@@ -24,11 +24,15 @@ public class LoginController {
 
     @PostMapping("login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
-        Person person = authService.login(loginRequest.getUsername(), loginRequest.getPassword());
+        Person usuario = authService.login(loginRequest.getUsername(), loginRequest.getPassword());
 
-        if (person != null) {
-            String token = authService.generateToken(person);
-            return ResponseEntity.ok().body(Map.of("token", token));
+        if (usuario != null) {
+            String jwt = authService.generateToken(usuario);
+            return ResponseEntity.ok(Map.of(
+                "token", jwt,
+                "id", usuario.getId(),
+                "username", usuario.getUsername()
+            ));
         }
 
         return ResponseEntity

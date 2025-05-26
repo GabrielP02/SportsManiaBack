@@ -8,13 +8,14 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import lombok.Data;
-
+import lombok.Getter;
+import lombok.Setter;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Data
 @Entity
-public class Produto {
+public class Produto{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,6 +29,17 @@ public class Produto {
 
     @Column
     private int quantidade;
+
+     public String getNome() {
+        return nome;
+    }
+    public int getQuantidade() {
+        return quantidade;
+    }
+    public double getPreco() {
+        return preco;
+    }
+
 
     @ManyToOne
     @JoinColumn(name = "estoque_id")

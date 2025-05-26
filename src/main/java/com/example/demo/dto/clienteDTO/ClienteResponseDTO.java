@@ -13,4 +13,8 @@ public class ClienteResponseDTO{
     private String nome;   
     private String cpf;
     private String endereco;    
+
+    public String getNome() {
+        return nome;
+    }
 }
