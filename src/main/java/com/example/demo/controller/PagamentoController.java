@@ -23,9 +23,9 @@ public class PagamentoController {
     @Autowired
     private PagamentoService pagamentoService;
 
-    @PostMapping("/carrinho/{clienteId}")
-    public String pagarCarrinho(@PathVariable Long clienteId) throws MPException, ResourceNotFoundException {
-        Carrinho carrinho = carrinhoService.findCarrinhoByClienteId(clienteId);
+    @PostMapping("/carrinho/{personId}")
+    public String pagarCarrinho(@PathVariable Long personId) throws MPException, ResourceNotFoundException {
+        Carrinho carrinho = carrinhoService.findCarrinhoByPersonId(personId);
         List<Produto> produtos = carrinho.getProdutos();
         return pagamentoService.criarPreferencia(produtos);
     }

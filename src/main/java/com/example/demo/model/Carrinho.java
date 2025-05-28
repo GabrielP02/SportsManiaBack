@@ -10,9 +10,11 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Data
@@ -23,8 +25,8 @@ public class Carrinho {
     private Long id;
 
     @OneToMany(mappedBy = "carrinho")
-    @JsonIgnore
-    private List<Produto> produtos;
+    @JsonManagedReference
+    private List<Produto> produtos = new ArrayList<>(); // Inicialize aqui
 
     @OneToOne
     @JoinColumn(name = "person_id")

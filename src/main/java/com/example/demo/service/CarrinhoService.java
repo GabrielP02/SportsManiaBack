@@ -13,6 +13,9 @@ import com.example.demo.repository.CarrinhoRepository;
 import com.example.demo.repository.PersonRepository;
 import com.example.demo.repository.ProdutoRepository;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class CarrinhoService {
 
@@ -43,9 +46,16 @@ public class CarrinhoService {
         if (carrinho == null) {
             carrinho = new Carrinho();
             carrinho.setPerson(person);
+            carrinho.setProdutos(new ArrayList<>()); // Garante que não é nulo
         }
+        // Setar o carrinho no produto
+        produto.setCarrinho(carrinho);
+
         carrinho.getProdutos().add(produto);
-        return carrinhoRepository.save(carrinho);
+        carrinhoRepository.save(carrinho);
+        produtoRepository.save(produto); // garantir persistência da relação
+
+        return carrinho;
     }
 
     // (DELETE) Remover produto do carrinho de uma person
@@ -89,5 +99,9 @@ public class CarrinhoService {
             throw new ResourceNotFoundException("Nenhum carrinho encontrado para a person com ID: " + personId);
         }
         return carrinho;
+    }
+
+    public List<Carrinho> getAllCarrinhos() {
+        return carrinhoRepository.findAll();
     }
 }

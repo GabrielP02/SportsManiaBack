@@ -13,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.modelmapper.ModelMapper;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/carrinho")
 public class CarrinhoController {
@@ -52,5 +54,12 @@ public class CarrinhoController {
     public ResponseEntity<Carrinho> finalizarCompra(@PathVariable Long personId) throws ResourceNotFoundException {
         Carrinho carrinho = carrinhoService.finalizarCompra(personId);
         return ResponseEntity.ok(carrinho);
+    }
+
+    // Buscar todos os carrinhos
+    @GetMapping("/all")
+    public ResponseEntity<List<Carrinho>> getAllCarrinhos() {
+        List<Carrinho> carrinhos = carrinhoService.getAllCarrinhos();
+        return ResponseEntity.ok(carrinhos);
     }
 }

@@ -12,6 +12,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Data
 @Entity
@@ -70,7 +71,7 @@ public class Produto{
 
     @ManyToOne
     @JoinColumn(name = "carrinho_id")
-    @JsonIgnore
+    @JsonBackReference
     private Carrinho carrinho;
 
     public void incrementarQuantidade(int quantidade) {
