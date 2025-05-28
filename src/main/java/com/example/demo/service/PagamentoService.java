@@ -3,6 +3,7 @@ package com.example.demo.service;
 import com.mercadopago.MercadoPago;
 import com.mercadopago.exceptions.MPException;
 import com.mercadopago.resources.Preference;
+import com.mercadopago.resources.datastructures.preference.BackUrls;
 import com.mercadopago.resources.datastructures.preference.Item;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,14 @@ public class PagamentoService {
         MercadoPago.SDK.setAccessToken(accessToken);
 
         Preference preference = new Preference();
+
+        // Configurar as back_urls
+        BackUrls backUrls = new BackUrls(
+            "http://localhost:3000/pagamento/sucesso",   // success
+            "http://localhost:3000/pagamento/pendente",  // pending
+            "http://localhost:3000/pagamento/erro"       // failure
+        );
+        preference.setBackUrls(backUrls);
 
         for (Produto produto : produtos) {
             Item item = new Item()
