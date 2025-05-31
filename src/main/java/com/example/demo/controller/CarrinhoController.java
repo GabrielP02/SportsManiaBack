@@ -42,11 +42,14 @@ public class CarrinhoController {
         return ResponseEntity.ok(dto);
     }
 
-    // Remover produto do carrinho da person
-    @DeleteMapping("/person/{personId}/remover")
-    public ResponseEntity<Carrinho> removerProdutoCarrinho(@PathVariable Long personId, @RequestBody Produto produto) throws ResourceNotFoundException {
-        Carrinho carrinho = carrinhoService.removerProdutoCarrinho(personId, produto);
-        return ResponseEntity.ok(carrinho);
+    // Remover produto do carrinho da person pelo ID do produto (ManyToMany)
+    @DeleteMapping("/person/{personId}/remover/{produtoId}")
+    public ResponseEntity<CarrinhoResponseDTO> removerProdutoCarrinhoPorId(
+            @PathVariable Long personId,
+            @PathVariable Long produtoId) throws ResourceNotFoundException {
+        Carrinho carrinho = carrinhoService.removerProdutoCarrinhoPorId(personId, produtoId);
+        CarrinhoResponseDTO dto = modelMapper.map(carrinho, CarrinhoResponseDTO.class);
+        return ResponseEntity.ok(dto);
     }
 
     // Finalizar compra do carrinho da person

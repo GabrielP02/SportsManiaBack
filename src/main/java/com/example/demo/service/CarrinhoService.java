@@ -76,6 +76,16 @@ public class CarrinhoService {
         return carrinhoRepository.save(carrinho);
     }
 
+    // (DELETE) Remover produto do carrinho de uma person por ID do produto
+    public Carrinho removerProdutoCarrinhoPorId(Long personId, Long produtoId) throws ResourceNotFoundException {
+        Carrinho carrinho = findCarrinhoByPersonId(personId);
+        boolean removed = carrinho.getProdutos().removeIf(produto -> produto.getId().equals(produtoId));
+        if (!removed) {
+            throw new ResourceNotFoundException("Produto não encontrado no carrinho");
+        }
+        return carrinhoRepository.save(carrinho);
+    }
+
     // (PUT) Finalizar compra do carrinho de uma person
     public Carrinho finalizarCompra(Long personId) throws ResourceNotFoundException {
         Person person = personRepository.findById(personId)
