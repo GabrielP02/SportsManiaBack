@@ -29,6 +29,8 @@ public class Person {
     @Column(unique = true, nullable = false)
     private String email;
     private PersonType personType;
+    @Column(length = 255)
+    private String endereco;
 
     // Getters and Setters
 
@@ -46,6 +48,10 @@ public class Person {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getEndereco() {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }
 
