@@ -46,6 +46,7 @@ public class PagamentoService {
             .excludedPaymentTypes(List.of()) // Não exclui nenhum tipo
             .excludedPaymentMethods(List.of()) // Não exclui nenhum método
             .installments(12) // Máximo de parcelas, ajuste se quiser
+            .defaultPaymentMethodId("pix") // Opcional: destaca Pix como padrão
             .build();
 
         // Monta a requisição da preferência
@@ -54,7 +55,6 @@ public class PagamentoService {
             .backUrls(backUrls)
             .paymentMethods(paymentMethods) // <-- adicione esta linha
             .autoReturn("approved")
-            .notificationUrl("https://sportsmaniaback.onrender.com/api/pagamento/webhook")
             .build();
 
         // Cria a preferência usando o client do SDK novo
