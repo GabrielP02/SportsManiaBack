@@ -36,15 +36,24 @@ public class PagamentoService {
 
         // Configura as URLs de retorno
         PreferenceBackUrlsRequest backUrls = PreferenceBackUrlsRequest.builder()
-            .success("https://www.google.com")
-            .pending("http://localhost:5173/pendente")
-            .failure("http://localhost:5173/erro")
+            .success("https://sports-mania-lemon.vercel.app/sucesso")
+            .pending("https://sports-mania-lemon.vercel.app/pendente")
+            .failure("https://sports-mania-lemon.vercel.app/erro")
+            .build();
+
+        // Permitir métodos de pagamento, incluindo Pix
+        PreferencePaymentMethodsRequest paymentMethods = PreferencePaymentMethodsRequest.builder()
+            .excludedPaymentTypes(List.of()) // Não exclui nenhum tipo
+            .excludedPaymentMethods(List.of()) // Não exclui nenhum método
+            .installments(12) // Máximo de parcelas, ajuste se quiser
+            .defaultPaymentMethodId("pix") // Opcional: destaca Pix como padrão
             .build();
 
         // Monta a requisição da preferência
         PreferenceRequest request = PreferenceRequest.builder()
             .items(items)
             .backUrls(backUrls)
+            .paymentMethods(paymentMethods) // <-- adicione esta linha
             .autoReturn("approved")
             .build();
 
