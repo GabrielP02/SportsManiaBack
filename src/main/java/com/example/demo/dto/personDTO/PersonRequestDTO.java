@@ -8,7 +8,7 @@ import lombok.Data;
 public class PersonRequestDTO {
     private String username;
     private String email;
-
+    private String password;
     
     @Size(min = 8, max = 9)
     private String cep;

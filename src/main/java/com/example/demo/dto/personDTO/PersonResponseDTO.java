@@ -13,5 +13,4 @@ public class PersonResponseDTO {
     private String bairro;
     private String cidade;
     private String uf;
-    private String password;
 }
