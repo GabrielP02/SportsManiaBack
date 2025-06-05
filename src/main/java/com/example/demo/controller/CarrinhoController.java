@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.carrinhoDTO.CarrinhoResponseDTO;
+import com.example.demo.dto.carrinhoDTO.QuantidadeDTO;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.model.Carrinho;
 import com.example.demo.model.Produto;
@@ -36,8 +37,9 @@ public class CarrinhoController {
     @PostMapping("/person/{personId}/adicionar")
     public ResponseEntity<CarrinhoResponseDTO> adicionarProdutoCarrinho(
             @PathVariable Long personId,
-            @RequestParam Long produtoId) throws ResourceNotFoundException {
-        Carrinho carrinho = carrinhoService.adicionarProdutoCarrinho(personId, produtoId);
+            @RequestParam Long produtoId,
+            @RequestBody QuantidadeDTO quantidadeDTO) throws ResourceNotFoundException {
+        Carrinho carrinho = carrinhoService.adicionarProdutoCarrinho(personId, produtoId, quantidadeDTO.getQuantidade());
         CarrinhoResponseDTO dto = modelMapper.map(carrinho, CarrinhoResponseDTO.class);
         return ResponseEntity.ok(dto);
     }
