@@ -35,7 +35,7 @@ public class CarrinhoService {
     }
 
     // (POST) Adicionar produto ao carrinho de uma person
-    public Carrinho adicionarProdutoCarrinho(Long personId, Long produtoId, int quantidade) throws ResourceNotFoundException {
+    public Carrinho adicionarProdutoCarrinho(Long personId, Long produtoId, int quantidadeDesejada) throws ResourceNotFoundException {
         Person person = personRepository.findById(personId)
             .orElseThrow(() -> new ResourceNotFoundException("Person não encontrada"));
 
@@ -56,14 +56,16 @@ public class CarrinhoService {
             .orElse(null);
 
         if (produtoNoCarrinho != null) {
-            produtoNoCarrinho.setQuantidade(produtoNoCarrinho.getQuantidade() + quantidade);
+            // Soma a quantidade
+            produtoNoCarrinho.setQuantidade(produtoNoCarrinho.getQuantidade() + quantidadeDesejada);
         } else {
+            // Adiciona novo produto ao carrinho com a quantidade desejada
             Produto novoProduto = new Produto();
             novoProduto.setId(produto.getId());
             novoProduto.setNome(produto.getNome());
             novoProduto.setPreco(produto.getPreco());
-            novoProduto.setQuantidade(quantidade);
-            // copie outros campos necessários
+            novoProduto.setQuantidade(quantidadeDesejada);
+            // ...outros campos necessários
             carrinho.getProdutos().add(novoProduto);
         }
 
@@ -71,21 +73,30 @@ public class CarrinhoService {
     }
 
     // (DELETE) Remover produto do carrinho de uma person
-    public Carrinho removerProdutoCarrinho(Long personId, Produto produto) throws ResourceNotFoundException {
+    public Carrinho removerProdutoCarrinho(Long personId, Long produtoId, int quantidadeParaRemover) throws ResourceNotFoundException {
         Person person = personRepository.findById(personId)
             .orElseThrow(() -> new ResourceNotFoundException("Person não encontrada"));
 
         Carrinho carrinho = carrinhoRepository.findCarrinhoByPerson(person);
         if (carrinho == null) {
-            throw new ResourceNotFoundException("Nenhum carrinho encontrado para a person com ID: " + personId);
+            throw new ResourceNotFoundException("Carrinho não encontrado");
         }
 
-        if (produto == null || !carrinho.getProdutos().contains(produto)) {
-            throw new ResourceNotFoundException("Produto não encontrado no carrinho");
-        }
+        Produto produtoNoCarrinho = carrinho.getProdutos().stream()
+            .filter(p -> p.getId().equals(produtoId))
+            .findFirst()
+            .orElse(null);
 
-        carrinho.getProdutos().remove(produto);
-        return carrinhoRepository.save(carrinho);
+        if (produtoNoCarrinho != null) {
+            int novaQuantidade = produtoNoCarrinho.getQuantidade() - quantidadeParaRemover;
+            if (novaQuantidade > 0) {
+                produtoNoCarrinho.setQuantidade(novaQuantidade);
+            } else {
+                carrinho.getProdutos().remove(produtoNoCarrinho);
+            }
+            carrinhoRepository.save(carrinho);
+        }
+        return carrinho;
     }
 
     // (DELETE) Remover produto do carrinho de uma person por ID do produto

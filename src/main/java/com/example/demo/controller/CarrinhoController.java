@@ -4,7 +4,6 @@ import com.example.demo.dto.carrinhoDTO.CarrinhoResponseDTO;
 import com.example.demo.dto.carrinhoDTO.QuantidadeDTO;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.model.Carrinho;
-import com.example.demo.model.Produto;
 import com.example.demo.service.CarrinhoService;
 
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -38,18 +37,21 @@ public class CarrinhoController {
     public ResponseEntity<CarrinhoResponseDTO> adicionarProdutoCarrinho(
             @PathVariable Long personId,
             @RequestParam Long produtoId,
-            @RequestBody QuantidadeDTO quantidadeDTO) throws ResourceNotFoundException {
-        Carrinho carrinho = carrinhoService.adicionarProdutoCarrinho(personId, produtoId, quantidadeDTO.getQuantidade());
-        CarrinhoResponseDTO dto = modelMapper.map(carrinho, CarrinhoResponseDTO.class);
-        return ResponseEntity.ok(dto);
+            @RequestBody QuantidadeDTO quantidadeDTO
+    ) throws ResourceNotFoundException {
+            Carrinho carrinho = carrinhoService.adicionarProdutoCarrinho(personId, produtoId, quantidadeDTO.getQuantidade());
+            CarrinhoResponseDTO dto = modelMapper.map(carrinho, CarrinhoResponseDTO.class);
+            return ResponseEntity.ok(dto);
     }
 
     // Remover produto do carrinho da person pelo ID do produto (ManyToMany)
-    @DeleteMapping("/person/{personId}/remover/{produtoId}")
-    public ResponseEntity<CarrinhoResponseDTO> removerProdutoCarrinhoPorId(
+    @DeleteMapping("/person/{personId}/remover")
+    public ResponseEntity<CarrinhoResponseDTO> removerProdutoCarrinho(
             @PathVariable Long personId,
-            @PathVariable Long produtoId) throws ResourceNotFoundException {
-        Carrinho carrinho = carrinhoService.removerProdutoCarrinhoPorId(personId, produtoId);
+            @RequestParam Long produtoId,
+            @RequestBody QuantidadeDTO quantidadeDTO
+    ) throws ResourceNotFoundException {
+        Carrinho carrinho = carrinhoService.removerProdutoCarrinho(personId, produtoId, quantidadeDTO.getQuantidade());
         CarrinhoResponseDTO dto = modelMapper.map(carrinho, CarrinhoResponseDTO.class);
         return ResponseEntity.ok(dto);
     }
