@@ -22,6 +22,9 @@ public class PersonService {
     private ModelMapper modelMapper;
 
     public PersonResponseDTO createPerson(PersonRequestDTO dto) {
+        if (personRepository.findByUsername(dto.getUsername()) != null) {
+            throw new IllegalArgumentException("Username já está em uso.");
+        }
         Person person = modelMapper.map(dto, Person.class);
         person = personRepository.save(person);
         return modelMapper.map(person, PersonResponseDTO.class);
@@ -40,13 +43,26 @@ public class PersonService {
 
     public PersonResponseDTO updateEndereco(Long id, PersonUpdateEnderecoDTO dto) {
         Person person = personRepository.findById(id).orElseThrow();
-        person.setEndereco(dto.getEndereco());
+        person.setCep(dto.getCep());
+        person.setRua(dto.getRua());
+        person.setNumero(dto.getNumero());
+        person.setBairro(dto.getBairro());
+        person.setCidade(dto.getCidade());
+        person.setUf(dto.getUf());
         person = personRepository.save(person);
         return modelMapper.map(person, PersonResponseDTO.class);
     }
 
     public void deletePerson(Long id) {
         personRepository.deleteById(id);
+    }
+
+    public Person findByUsername(String username) {
+        return personRepository.findByUsername(username);
+    }
+
+    public Person findByUsernameAndPassword(String username, String password) {
+        return personRepository.findByUsernameAndPassword(username, password);
     }
 }
 

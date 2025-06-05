@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class PersonResponseDTO {
     private Long id;
-    private String nome;
+    private String username;
     private String email;
     private String cep;
     private String rua;

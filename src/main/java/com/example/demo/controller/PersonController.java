@@ -5,6 +5,7 @@ import com.example.demo.dto.personDTO.PersonResponseDTO;
 import com.example.demo.dto.personDTO.PersonUpdateEnderecoDTO;
 import com.example.demo.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,8 +19,12 @@ public class PersonController {
 
     // Criar uma nova pessoa
     @PostMapping("/create")
-    public PersonResponseDTO createPerson(@RequestBody PersonRequestDTO dto) {
-        return personService.createPerson(dto);
+    public ResponseEntity<?> createPerson(@RequestBody PersonRequestDTO dto) {
+        try {
+            return ResponseEntity.ok(personService.createPerson(dto));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     // Buscar pessoa por ID
