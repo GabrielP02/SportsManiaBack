@@ -29,6 +29,14 @@ public class Person {
     @Column(unique = true, nullable = false)
     private String email;
     private PersonType personType;
+   @Column(length = 9)
+    private String cep;
+
+    private String rua;
+    private String numero;
+    private String bairro;
+    private String cidade;
+    private String uf;
 
     // Getters and Setters
 

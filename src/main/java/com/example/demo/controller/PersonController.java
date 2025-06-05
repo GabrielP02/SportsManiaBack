@@ -1,49 +1,49 @@
 package com.example.demo.controller;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.example.demo.model.Person;
+import com.example.demo.dto.personDTO.PersonRequestDTO;
+import com.example.demo.dto.personDTO.PersonResponseDTO;
+import com.example.demo.dto.personDTO.PersonUpdateEnderecoDTO;
 import com.example.demo.service.PersonService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-
-
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/persons")
-@SecurityRequirement(name = "")
 public class PersonController {
 
     @Autowired
     private PersonService personService;
 
+    // Criar uma nova pessoa
     @PostMapping("/create")
-    public Person createPerson(@RequestBody Person person) {
-        return personService.createPerson(person);
+    public PersonResponseDTO createPerson(@RequestBody PersonRequestDTO dto) {
+        return personService.createPerson(dto);
     }
 
-    @GetMapping("/all")
-    public List<Person> getAllPersons() {
-        return personService.getAllPersons();
-    }
-
+    // Buscar pessoa por ID
     @GetMapping("/{id}")
-    public Person getPersonById(@PathVariable Long id) {
+    public PersonResponseDTO getPersonById(@PathVariable Long id) {
         return personService.getPersonById(id);
     }
 
-    
-    @GetMapping("/email/{email}")
-    public Person getPersonByEmail(@PathVariable String email) {
-        return personService.findByEmail(email);
+    // Buscar todas as pessoas
+    @GetMapping("/all")
+    public List<PersonResponseDTO> getAllPersons() {
+        return personService.getAllPersons();
+    }
+
+    // Atualizar endereço
+    @PutMapping("/{id}/endereco")
+    public PersonResponseDTO updateEndereco(@PathVariable Long id, @RequestBody PersonUpdateEnderecoDTO dto) {
+        return personService.updateEndereco(id, dto);
+    }
+
+    // Deletar pessoa
+    @DeleteMapping("/{id}")
+    public void deletePerson(@PathVariable Long id) {
+        personService.deletePerson(id);
     }
 }
 

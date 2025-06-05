@@ -1,15 +1,16 @@
 package com.example.demo.service;
 
-import java.util.List;
-import java.util.Optional;
-
+import com.example.demo.dto.personDTO.PersonRequestDTO;
+import com.example.demo.dto.personDTO.PersonResponseDTO;
+import com.example.demo.dto.personDTO.PersonUpdateEnderecoDTO;
+import com.example.demo.model.Person;
+import com.example.demo.repository.PersonRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.demo.model.Person;
-import com.example.demo.repository.PersonRepository;
-
-
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class PersonService {
@@ -17,34 +18,35 @@ public class PersonService {
     @Autowired
     private PersonRepository personRepository;
 
-    public Person createPerson(Person person) {
-        // Aqui você pode adicionar lógica de criptografia de senha se necessário
-        return personRepository.save(person);
+    @Autowired
+    private ModelMapper modelMapper;
+
+    public PersonResponseDTO createPerson(PersonRequestDTO dto) {
+        Person person = modelMapper.map(dto, Person.class);
+        person = personRepository.save(person);
+        return modelMapper.map(person, PersonResponseDTO.class);
     }
 
-    public List<Person> getAllPersons() {
-        return personRepository.findAll();
+    public PersonResponseDTO getPersonById(Long id) {
+        Person person = personRepository.findById(id).orElseThrow();
+        return modelMapper.map(person, PersonResponseDTO.class);
     }
 
-    public Person getPersonById(Long id) {
-        Optional<Person> personOptional = personRepository.findById(id);
-        if (personOptional.isPresent()) {
-            return personOptional.get();
-        } else {
-            return null;// deveria fazer tratamento de exc eçõ
-        }
-    }
-    
-    public Person findByUsernameAndPassword(String username, String password) {
-        return personRepository.findByUsernameAndPassword(username, password);
+    public List<PersonResponseDTO> getAllPersons() {
+        return personRepository.findAll().stream()
+                .map(person -> modelMapper.map(person, PersonResponseDTO.class))
+                .collect(Collectors.toList());
     }
 
-    public Person findByUsername(String username) {
-        return personRepository.findByUsername(username);
+    public PersonResponseDTO updateEndereco(Long id, PersonUpdateEnderecoDTO dto) {
+        Person person = personRepository.findById(id).orElseThrow();
+        person.setEndereco(dto.getEndereco());
+        person = personRepository.save(person);
+        return modelMapper.map(person, PersonResponseDTO.class);
     }
 
-    public Person findByEmail(String email) {
-        return personRepository.findByEmail(email);
+    public void deletePerson(Long id) {
+        personRepository.deleteById(id);
     }
 }
 
