@@ -2,6 +2,7 @@ package com.example.demo.service;
 
 import com.example.demo.dto.personDTO.PersonRequestDTO;
 import com.example.demo.dto.personDTO.PersonResponseDTO;
+import com.example.demo.dto.personDTO.PersonUpdateAuthDTO;
 import com.example.demo.dto.personDTO.PersonUpdateEnderecoDTO;
 import com.example.demo.model.Person;
 import com.example.demo.repository.PersonRepository;
@@ -63,6 +64,15 @@ public class PersonService {
 
     public Person findByUsernameAndPassword(String username, String password) {
         return personRepository.findByUsernameAndPassword(username, password);
+    }
+
+    public PersonResponseDTO updateUsernameAndPassword(Long id, PersonUpdateAuthDTO dto) {
+        Person person = personRepository.findById(id).orElseThrow();
+        person.setUsername(dto.getUsername());
+        person.setPassword(dto.getPassword());
+        person.setEmail(dto.getEmail());
+        person = personRepository.save(person);
+        return modelMapper.map(person, PersonResponseDTO.class);
     }
 }
 

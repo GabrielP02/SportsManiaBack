@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.personDTO.PersonRequestDTO;
 import com.example.demo.dto.personDTO.PersonResponseDTO;
+import com.example.demo.dto.personDTO.PersonUpdateAuthDTO;
 import com.example.demo.dto.personDTO.PersonUpdateEnderecoDTO;
 import com.example.demo.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +44,14 @@ public class PersonController {
     @PutMapping("/{id}/endereco")
     public PersonResponseDTO updateEndereco(@PathVariable Long id, @RequestBody PersonUpdateEnderecoDTO dto) {
         return personService.updateEndereco(id, dto);
+    }
+
+    // Atualizar username e senha
+    @PutMapping("/{id}/auth")
+    public PersonResponseDTO updateUsernameAndPassword(
+            @PathVariable Long id,
+            @RequestBody PersonUpdateAuthDTO dto) {
+        return personService.updateUsernameAndPassword(id, dto);
     }
 
     // Deletar pessoa
