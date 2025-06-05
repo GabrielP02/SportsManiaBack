@@ -7,6 +7,7 @@ public class PersonResponseDTO {
     private Long id;
     private String username;
     private String email;
+    private String password;
     private String cep;
     private String rua;
     private String numero;
