@@ -28,7 +28,6 @@ public class PersonService {
         }
         Person person = modelMapper.map(dto, Person.class);
         // Garante que todos os campos estão sendo copiados
-        person.setNome(dto.getNome());
         person.setEmail(dto.getEmail());
         person.setUsername(dto.getUsername());
         person.setPassword(dto.getPassword());

@@ -1,6 +1,8 @@
 package com.example.demo.dto.personDTO;
 
 
+import com.example.demo.model.Enum.PersonType;
+
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
@@ -9,7 +11,7 @@ public class PersonRequestDTO {
     private String username;
     private String email;
     private String password;
-    private String personType;
+    private PersonType personType;
     @Size(min = 8, max = 9)
     private String cep;
 
