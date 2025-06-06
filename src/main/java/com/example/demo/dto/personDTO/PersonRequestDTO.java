@@ -9,7 +9,7 @@ public class PersonRequestDTO {
     private String username;
     private String email;
     private String password;
-    
+    private String personType;
     @Size(min = 8, max = 9)
     private String cep;
 

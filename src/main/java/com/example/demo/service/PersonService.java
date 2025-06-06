@@ -27,6 +27,18 @@ public class PersonService {
             throw new IllegalArgumentException("Username já está em uso.");
         }
         Person person = modelMapper.map(dto, Person.class);
+        // Garante que todos os campos estão sendo copiados
+        person.setNome(dto.getNome());
+        person.setEmail(dto.getEmail());
+        person.setUsername(dto.getUsername());
+        person.setPassword(dto.getPassword());
+        person.setPersonType(dto.getPersonType());
+        person.setCep(dto.getCep());
+        person.setRua(dto.getRua());
+        person.setNumero(dto.getNumero());
+        person.setBairro(dto.getBairro());
+        person.setCidade(dto.getCidade());
+        person.setUf(dto.getUf());
         person = personRepository.save(person);
         return modelMapper.map(person, PersonResponseDTO.class);
     }

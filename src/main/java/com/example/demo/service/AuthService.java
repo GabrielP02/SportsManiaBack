@@ -21,9 +21,10 @@ public class AuthService {
 
     // Gera o token JWT para o usuário
     public String generateToken(Person person) {
+        String role = person.getPersonType() != null ? person.getPersonType().name() : "CLIENTE";
         return Jwts.builder()
             .setSubject(person.getUsername())
-            .claim("role", person.getPersonType().name())
+            .claim("role", role)
             .setIssuedAt(new Date()) // Data de criação
             .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)) // Expira em 10 horas
             .signWith(SignatureAlgorithm.HS512, SECRET_KEY)
@@ -43,6 +44,10 @@ public class AuthService {
 
     // Realiza o login verificando username e senha
     public Person login(String username, String password) {
-        return personService.findByUsernameAndPassword(username, password);
+        Person person = personService.findByUsernameAndPassword(username, password);
+        if (person == null) {
+            throw new IllegalArgumentException("Usuário ou senha inválidos.");
+        }
+        return person;
     }
 }
