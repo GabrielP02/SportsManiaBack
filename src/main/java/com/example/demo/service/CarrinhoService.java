@@ -51,18 +51,18 @@ public class CarrinhoService {
         if (carrinho == null) {
             carrinho = new Carrinho();
             carrinho.setPerson(person);
-            carrinho.setProdutos(new ArrayList<>());
+            carrinho.setItens(new ArrayList<>());
         }
 
         // Verifica se o produto já está no carrinho
-        Produto produtoNoCarrinho = carrinho.getProdutos().stream()
-            .filter(p -> p.getId().equals(produtoId))
+        CarrinhoProduto itemNoCarrinho = carrinho.getItens().stream()
+            .filter(i -> i.getProduto().getId().equals(produtoId))
             .findFirst()
             .orElse(null);
 
-        if (produtoNoCarrinho != null) {
+        if (itemNoCarrinho != null) {
             // Soma a quantidade
-            produtoNoCarrinho.setQuantidade(produtoNoCarrinho.getQuantidade() + quantidadeDesejada);
+            itemNoCarrinho.setQuantidade(itemNoCarrinho.getQuantidade() + quantidadeDesejada);
         } else {
             // Adiciona novo produto ao carrinho com a quantidade desejada
             Produto novoProduto = new Produto();
@@ -71,7 +71,11 @@ public class CarrinhoService {
             novoProduto.setPreco(produto.getPreco());
             novoProduto.setQuantidade(quantidadeDesejada);
             // ...outros campos necessários
-            carrinho.getProdutos().add(novoProduto);
+            CarrinhoProduto novoItem = new CarrinhoProduto();
+            novoItem.setCarrinho(carrinho);
+            novoItem.setProduto(novoProduto);
+            novoItem.setQuantidade(quantidadeDesejada);
+            carrinho.getItens().add(novoItem);
         }
 
         return carrinhoRepository.save(carrinho);
@@ -87,17 +91,17 @@ public class CarrinhoService {
             throw new ResourceNotFoundException("Carrinho não encontrado");
         }
 
-        Produto produtoNoCarrinho = carrinho.getProdutos().stream()
-            .filter(p -> p.getId().equals(produtoId))
+        CarrinhoProduto itemNoCarrinho = carrinho.getItens().stream()
+            .filter(i -> i.getProduto().getId().equals(produtoId))
             .findFirst()
             .orElse(null);
 
-        if (produtoNoCarrinho != null) {
-            int novaQuantidade = produtoNoCarrinho.getQuantidade() - quantidadeParaRemover;
+        if (itemNoCarrinho != null) {
+            int novaQuantidade = itemNoCarrinho.getQuantidade() - quantidadeParaRemover;
             if (novaQuantidade > 0) {
-                produtoNoCarrinho.setQuantidade(novaQuantidade);
+                itemNoCarrinho.setQuantidade(novaQuantidade);
             } else {
-                carrinho.getProdutos().remove(produtoNoCarrinho);
+                carrinho.getItens().remove(itemNoCarrinho);
             }
             carrinhoRepository.save(carrinho);
         }
@@ -107,7 +111,7 @@ public class CarrinhoService {
     // (DELETE) Remover produto do carrinho de uma person por ID do produto
     public Carrinho removerProdutoCarrinhoPorId(Long personId, Long produtoId) throws ResourceNotFoundException {
         Carrinho carrinho = findCarrinhoByPersonId(personId);
-        boolean removed = carrinho.getProdutos().removeIf(produto -> produto.getId().equals(produtoId));
+        boolean removed = carrinho.getItens().removeIf(item -> item.getProduto().getId().equals(produtoId));
         if (!removed) {
             throw new ResourceNotFoundException("Produto não encontrado no carrinho");
         }
@@ -124,7 +128,7 @@ public class CarrinhoService {
             throw new ResourceNotFoundException("Nenhum carrinho encontrado para a person com ID: " + personId);
         }
 
-        carrinho.getProdutos().clear();
+        carrinho.getItens().clear();
         return carrinhoRepository.save(carrinho);
     }
 
