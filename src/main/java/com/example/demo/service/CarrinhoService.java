@@ -7,8 +7,10 @@ import org.springframework.stereotype.Service;
 import com.example.demo.dto.carrinhoDTO.CarrinhoResponseDTO;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.model.Carrinho;
+import com.example.demo.model.CarrinhoProduto;
 import com.example.demo.model.Person;
 import com.example.demo.model.Produto;
+import com.example.demo.repository.CarrinhoProdutoRepository;
 import com.example.demo.repository.CarrinhoRepository;
 import com.example.demo.repository.PersonRepository;
 import com.example.demo.repository.ProdutoRepository;
@@ -27,6 +29,9 @@ public class CarrinhoService {
 
     @Autowired
     private ProdutoRepository produtoRepository;
+
+    @Autowired
+    private CarrinhoProdutoRepository carrinhoProdutoRepository;
 
     private final ModelMapper modelMapper;
 
@@ -136,5 +141,36 @@ public class CarrinhoService {
 
     public List<Carrinho> getAllCarrinhos() {
         return carrinhoRepository.findAll();
+    }
+
+    public void removerProdutoDoCarrinho(Long carrinhoId, Long produtoId, int quantidadeParaRemover) {
+        CarrinhoProduto item = carrinhoProdutoRepository.findByCarrinhoIdAndProdutoId(carrinhoId, produtoId);
+        if (item != null) {
+            if (item.getQuantidade() > quantidadeParaRemover) {
+                item.setQuantidade(item.getQuantidade() - quantidadeParaRemover);
+                carrinhoProdutoRepository.save(item);
+            } else {
+                carrinhoProdutoRepository.delete(item);
+            }
+        }
+        // NÃO altere produto.setQuantidade() aqui!
+    }
+
+    public void adicionarProdutoAoCarrinho(Long carrinhoId, Long produtoId, int quantidade) {
+        CarrinhoProduto item = carrinhoProdutoRepository.findByCarrinhoIdAndProdutoId(carrinhoId, produtoId);
+        if (item != null) {
+            // Produto já está no carrinho, soma a quantidade
+            item.setQuantidade(item.getQuantidade() + quantidade);
+            carrinhoProdutoRepository.save(item);
+        } else {
+            // Produto ainda não está no carrinho, cria novo item
+            Carrinho carrinho = carrinhoRepository.findById(carrinhoId).orElseThrow();
+            Produto produto = produtoRepository.findById(produtoId).orElseThrow();
+            CarrinhoProduto novoItem = new CarrinhoProduto();
+            novoItem.setCarrinho(carrinho);
+            novoItem.setProduto(produto);
+            novoItem.setQuantidade(quantidade);
+            carrinhoProdutoRepository.save(novoItem);
+        }
     }
 }

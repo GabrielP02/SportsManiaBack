@@ -32,17 +32,6 @@ public class CarrinhoController {
         return ResponseEntity.ok(carrinho);
     }
 
-    // Adicionar produto ao carrinho da person
-    @PostMapping("/person/{personId}/adicionar")
-    public ResponseEntity<CarrinhoResponseDTO> adicionarProdutoCarrinho(
-            @PathVariable Long personId,
-            @RequestParam Long produtoId,
-            @RequestBody QuantidadeDTO quantidadeDTO
-    ) throws ResourceNotFoundException {
-            Carrinho carrinho = carrinhoService.adicionarProdutoCarrinho(personId, produtoId, quantidadeDTO.getQuantidade());
-            CarrinhoResponseDTO dto = modelMapper.map(carrinho, CarrinhoResponseDTO.class);
-            return ResponseEntity.ok(dto);
-    }
 
     // Remover produto do carrinho da person pelo ID do produto (ManyToMany)
     @DeleteMapping("/person/{personId}/remover")
@@ -68,5 +57,24 @@ public class CarrinhoController {
     public ResponseEntity<List<Carrinho>> getAllCarrinhos() {
         List<Carrinho> carrinhos = carrinhoService.getAllCarrinhos();
         return ResponseEntity.ok(carrinhos);
+    }
+
+    // Remover produto do carrinho pelo ID do carrinho e do produto
+    @DeleteMapping("/{carrinhoId}/produto/{produtoId}")
+    public ResponseEntity<?> removerProdutoDoCarrinho(
+            @PathVariable Long carrinhoId,
+            @PathVariable Long produtoId,
+            @RequestParam int quantidadeParaRemover) {
+        carrinhoService.removerProdutoDoCarrinho(carrinhoId, produtoId, quantidadeParaRemover);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/{carrinhoId}/produto/{produtoId}")
+    public ResponseEntity<?> adicionarProdutoAoCarrinho(
+            @PathVariable Long carrinhoId,
+            @PathVariable Long produtoId,
+            @RequestParam int quantidade) {
+        carrinhoService.adicionarProdutoAoCarrinho(carrinhoId, produtoId, quantidade);
+        return ResponseEntity.ok().build();
     }
 }
