@@ -18,6 +18,16 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowedHeaders("*")
                 .allowCredentials(false);
 
+        // Permitir CORS para o endpoint de frete
+        registry.addMapping("/calcular-frete")
+                .allowedOrigins(
+                    "http://localhost:5173",
+                    "https://sports-mania-lemon.vercel.app"
+                )
+                .allowedMethods("POST", "OPTIONS")
+                .allowedHeaders("*")
+                .allowCredentials(false);
+
         // Configuração para Swagger
         registry.addMapping("/v3/api-docs/**")
                 .allowedOrigins("*")
