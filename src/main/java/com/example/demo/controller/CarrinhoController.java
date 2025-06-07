@@ -41,14 +41,13 @@ public class CarrinhoController {
 
     // Remover produto do carrinho da person pelo ID do produto (ManyToMany)
     @DeleteMapping("/person/{personId}/remover")
-    public ResponseEntity<CarrinhoResponseDTO> removerProdutoCarrinho(
+    public ResponseEntity<Void> removerProdutoCarrinho(
             @PathVariable Long personId,
             @RequestParam Long produtoId,
             @RequestBody QuantidadeDTO quantidadeDTO
     ) throws ResourceNotFoundException {
-        Carrinho carrinho = carrinhoService.removerProdutoCarrinho(personId, produtoId, quantidadeDTO.getQuantidade());
-        CarrinhoResponseDTO dto = modelMapper.map(carrinho, CarrinhoResponseDTO.class);
-        return ResponseEntity.ok(dto);
+        carrinhoService.removerProdutoDoCarrinho(personId, produtoId, quantidadeDTO.getQuantidade());
+        return ResponseEntity.ok().build();
     }
 
     // Finalizar compra do carrinho da person
@@ -77,17 +76,18 @@ public class CarrinhoController {
     public ResponseEntity<?> removerProdutoDoCarrinho(
             @PathVariable Long carrinhoId,
             @PathVariable Long produtoId,
-            @RequestParam int quantidadeParaRemover) {
+            @RequestParam int quantidadeParaRemover) throws ResourceNotFoundException {
         carrinhoService.removerProdutoDoCarrinho(carrinhoId, produtoId, quantidadeParaRemover);
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/{carrinhoId}/produto/{produtoId}")
+    @PostMapping("/person/{personId}/produto/{produtoId}")
     public ResponseEntity<?> adicionarProdutoAoCarrinho(
-            @PathVariable Long carrinhoId,
+            @PathVariable Long personId,
             @PathVariable Long produtoId,
-            @RequestParam int quantidade) {
-        carrinhoService.adicionarProdutoAoCarrinho(carrinhoId, produtoId, quantidade);
+            @RequestParam int quantidade) throws ResourceNotFoundException {
+        carrinhoService.adicionarProdutoAoCarrinho(personId, produtoId, quantidade);
         return ResponseEntity.ok().build();
     }
+
 }
