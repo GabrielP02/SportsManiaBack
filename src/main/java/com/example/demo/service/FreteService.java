@@ -16,7 +16,7 @@ public class FreteService {
     private String melhorEnvioToken;
 
     public String calcularFrete(Map<String, Object> payload) {
-        String url = "https://api.melhorenvio.com.br/api/v2/me/shipment/calculate";
+        String url = "https://www.melhorenvio.com.br/api/v2/me/shipment/calculate";
         RestTemplate restTemplate = new RestTemplate();
 
         HttpHeaders headers = new HttpHeaders();
