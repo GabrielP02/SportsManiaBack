@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.modelmapper.ModelMapper;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/carrinho")
@@ -27,9 +28,14 @@ public class CarrinhoController {
 
     // Buscar carrinho por person
     @GetMapping("/person/{personId}")
-    public ResponseEntity<Carrinho> getCarrinhoByPerson(@PathVariable Long personId) throws ResourceNotFoundException {
+    public ResponseEntity<CarrinhoResponseDTO> getCarrinhoByPerson(@PathVariable Long personId) throws ResourceNotFoundException {
         Carrinho carrinho = carrinhoService.findCarrinhoByPersonId(personId);
-        return ResponseEntity.ok(carrinho);
+        CarrinhoResponseDTO dto = new CarrinhoResponseDTO(
+            carrinho.getId(),
+            carrinho.getItens(),
+            carrinho.getPerson()
+        );
+        return ResponseEntity.ok(dto);
     }
 
 
@@ -54,9 +60,16 @@ public class CarrinhoController {
 
     // Buscar todos os carrinhos
     @GetMapping("/all")
-    public ResponseEntity<List<Carrinho>> getAllCarrinhos() {
+    public ResponseEntity<List<CarrinhoResponseDTO>> getAllCarrinhos() {
         List<Carrinho> carrinhos = carrinhoService.getAllCarrinhos();
-        return ResponseEntity.ok(carrinhos);
+        List<CarrinhoResponseDTO> dtos = carrinhos.stream()
+            .map(carrinho -> new CarrinhoResponseDTO(
+                carrinho.getId(),
+                carrinho.getItens(),
+                carrinho.getPerson()
+            ))
+            .collect(Collectors.toList());
+        return ResponseEntity.ok(dtos);
     }
 
     // Remover produto do carrinho pelo ID do carrinho e do produto

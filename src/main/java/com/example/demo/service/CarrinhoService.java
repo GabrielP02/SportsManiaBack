@@ -177,4 +177,13 @@ public class CarrinhoService {
             carrinhoProdutoRepository.save(novoItem);
         }
     }
+
+    public CarrinhoResponseDTO getCarrinhoResponseByPersonId(Long personId) throws ResourceNotFoundException {
+        Carrinho carrinho = findCarrinhoByPersonId(personId);
+        return new CarrinhoResponseDTO(
+            carrinho.getId(),
+            carrinho.getItens(),
+            carrinho.getPerson()
+        );
+    }
 }

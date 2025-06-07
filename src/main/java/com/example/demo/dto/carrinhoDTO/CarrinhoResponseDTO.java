@@ -1,26 +1,28 @@
 package com.example.demo.dto.carrinhoDTO;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
+import com.example.demo.model.CarrinhoProduto;
 import com.example.demo.model.Person;
-import com.example.demo.model.Produto;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 public class CarrinhoResponseDTO {
 
     private Long id;
-    private List<Produto> produtos;
+    private List<ItemCarrinhoDTO> itens;
     private Person person;
 
-    public CarrinhoResponseDTO(Person person, List<Produto> produtos) {
+    // Construtor para converter de entidade Carrinho
+    public CarrinhoResponseDTO(Long id, List<CarrinhoProduto> itensCarrinho, Person person) {
+        this.id = id;
         this.person = person;
-        this.produtos = produtos;
+        this.itens = itensCarrinho.stream()
+            .map(item -> new ItemCarrinhoDTO(item.getProduto(), item.getQuantidade()))
+            .collect(Collectors.toList());
     }
-
 }
