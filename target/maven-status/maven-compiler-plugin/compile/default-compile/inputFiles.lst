@@ -8,6 +8,7 @@ C:\Users\T-GAMER\Desktop\SportsManiaBack\src\main\java\com\example\demo\controll
 C:\Users\T-GAMER\Desktop\SportsManiaBack\src\main\java\com\example\demo\controller\ClienteController.java
 C:\Users\T-GAMER\Desktop\SportsManiaBack\src\main\java\com\example\demo\controller\CompraController.java
 C:\Users\T-GAMER\Desktop\SportsManiaBack\src\main\java\com\example\demo\controller\EstoqueController.java
+C:\Users\T-GAMER\Desktop\SportsManiaBack\src\main\java\com\example\demo\controller\FreteController.java
 C:\Users\T-GAMER\Desktop\SportsManiaBack\src\main\java\com\example\demo\controller\FuncionarioController.java
 C:\Users\T-GAMER\Desktop\SportsManiaBack\src\main\java\com\example\demo\controller\LoginController.java
 C:\Users\T-GAMER\Desktop\SportsManiaBack\src\main\java\com\example\demo\controller\PagamentoController.java
@@ -19,15 +20,24 @@ C:\Users\T-GAMER\Desktop\SportsManiaBack\src\main\java\com\example\demo\dto\admi
 C:\Users\T-GAMER\Desktop\SportsManiaBack\src\main\java\com\example\demo\dto\administradorDTO\AdministradorResponseDTO.java
 C:\Users\T-GAMER\Desktop\SportsManiaBack\src\main\java\com\example\demo\dto\carrinhoDTO\CarrinhoRequestDTO.java
 C:\Users\T-GAMER\Desktop\SportsManiaBack\src\main\java\com\example\demo\dto\carrinhoDTO\CarrinhoResponseDTO.java
+C:\Users\T-GAMER\Desktop\SportsManiaBack\src\main\java\com\example\demo\dto\carrinhoDTO\ItemCarrinhoDTO.java
+C:\Users\T-GAMER\Desktop\SportsManiaBack\src\main\java\com\example\demo\dto\carrinhoDTO\QuantidadeDTO.java
 C:\Users\T-GAMER\Desktop\SportsManiaBack\src\main\java\com\example\demo\dto\clienteDTO\ClienteRequestDTO.java
 C:\Users\T-GAMER\Desktop\SportsManiaBack\src\main\java\com\example\demo\dto\clienteDTO\ClienteResponseDTO.java
 C:\Users\T-GAMER\Desktop\SportsManiaBack\src\main\java\com\example\demo\dto\compraDTO\CompraRequestDTO.java
 C:\Users\T-GAMER\Desktop\SportsManiaBack\src\main\java\com\example\demo\dto\compraDTO\CompraResponseDTO.java
 C:\Users\T-GAMER\Desktop\SportsManiaBack\src\main\java\com\example\demo\dto\estoqueDTO\EstoqueRequestDTO.java
 C:\Users\T-GAMER\Desktop\SportsManiaBack\src\main\java\com\example\demo\dto\estoqueDTO\EstoqueResponseDTO.java
+C:\Users\T-GAMER\Desktop\SportsManiaBack\src\main\java\com\example\demo\dto\freteDTO\FreteRequestDTO.java
 C:\Users\T-GAMER\Desktop\SportsManiaBack\src\main\java\com\example\demo\dto\funcionarioDTO\FuncionarioRequestDTO.java
 C:\Users\T-GAMER\Desktop\SportsManiaBack\src\main\java\com\example\demo\dto\funcionarioDTO\FuncionarioResponseDTO.java
 C:\Users\T-GAMER\Desktop\SportsManiaBack\src\main\java\com\example\demo\dto\LoginRequest.java
+C:\Users\T-GAMER\Desktop\SportsManiaBack\src\main\java\com\example\demo\dto\pagamentoDTO\FreteSelecionadoDTO.java
+C:\Users\T-GAMER\Desktop\SportsManiaBack\src\main\java\com\example\demo\dto\pagamentoDTO\PagamentoRequestDTO.java
+C:\Users\T-GAMER\Desktop\SportsManiaBack\src\main\java\com\example\demo\dto\personDTO\PersonRequestDTO.java
+C:\Users\T-GAMER\Desktop\SportsManiaBack\src\main\java\com\example\demo\dto\personDTO\PersonResponseDTO.java
+C:\Users\T-GAMER\Desktop\SportsManiaBack\src\main\java\com\example\demo\dto\personDTO\PersonUpdateAuthDTO.java
+C:\Users\T-GAMER\Desktop\SportsManiaBack\src\main\java\com\example\demo\dto\personDTO\PersonUpdateEnderecoDTO.java
 C:\Users\T-GAMER\Desktop\SportsManiaBack\src\main\java\com\example\demo\dto\produtoDTO\ProdutoRequestDTO.java
 C:\Users\T-GAMER\Desktop\SportsManiaBack\src\main\java\com\example\demo\dto\produtoDTO\ProdutoResponseDTO.java
 C:\Users\T-GAMER\Desktop\SportsManiaBack\src\main\java\com\example\demo\dto\vendaDTO\VendaRequestDTO.java
@@ -36,6 +46,7 @@ C:\Users\T-GAMER\Desktop\SportsManiaBack\src\main\java\com\example\demo\exceptio
 C:\Users\T-GAMER\Desktop\SportsManiaBack\src\main\java\com\example\demo\mapper\Mapper.java
 C:\Users\T-GAMER\Desktop\SportsManiaBack\src\main\java\com\example\demo\model\Administrador.java
 C:\Users\T-GAMER\Desktop\SportsManiaBack\src\main\java\com\example\demo\model\Carrinho.java
+C:\Users\T-GAMER\Desktop\SportsManiaBack\src\main\java\com\example\demo\model\CarrinhoProduto.java
 C:\Users\T-GAMER\Desktop\SportsManiaBack\src\main\java\com\example\demo\model\Cliente.java
 C:\Users\T-GAMER\Desktop\SportsManiaBack\src\main\java\com\example\demo\model\Compra.java
 C:\Users\T-GAMER\Desktop\SportsManiaBack\src\main\java\com\example\demo\model\Enum\PersonType.java
@@ -45,6 +56,7 @@ C:\Users\T-GAMER\Desktop\SportsManiaBack\src\main\java\com\example\demo\model\Pe
 C:\Users\T-GAMER\Desktop\SportsManiaBack\src\main\java\com\example\demo\model\Produto.java
 C:\Users\T-GAMER\Desktop\SportsManiaBack\src\main\java\com\example\demo\model\Venda.java
 C:\Users\T-GAMER\Desktop\SportsManiaBack\src\main\java\com\example\demo\repository\AdministradorRepository.java
+C:\Users\T-GAMER\Desktop\SportsManiaBack\src\main\java\com\example\demo\repository\CarrinhoProdutoRepository.java
 C:\Users\T-GAMER\Desktop\SportsManiaBack\src\main\java\com\example\demo\repository\CarrinhoRepository.java
 C:\Users\T-GAMER\Desktop\SportsManiaBack\src\main\java\com\example\demo\repository\ClienteRepository.java
 C:\Users\T-GAMER\Desktop\SportsManiaBack\src\main\java\com\example\demo\repository\CompraRepository.java
@@ -59,6 +71,7 @@ C:\Users\T-GAMER\Desktop\SportsManiaBack\src\main\java\com\example\demo\service\
 C:\Users\T-GAMER\Desktop\SportsManiaBack\src\main\java\com\example\demo\service\ClienteService.java
 C:\Users\T-GAMER\Desktop\SportsManiaBack\src\main\java\com\example\demo\service\CompraService.java
 C:\Users\T-GAMER\Desktop\SportsManiaBack\src\main\java\com\example\demo\service\EstoqueService.java
+C:\Users\T-GAMER\Desktop\SportsManiaBack\src\main\java\com\example\demo\service\FreteService.java
 C:\Users\T-GAMER\Desktop\SportsManiaBack\src\main\java\com\example\demo\service\FuncionarioService.java
 C:\Users\T-GAMER\Desktop\SportsManiaBack\src\main\java\com\example\demo\service\PagamentoService.java
 C:\Users\T-GAMER\Desktop\SportsManiaBack\src\main\java\com\example\demo\service\PersonService.java
