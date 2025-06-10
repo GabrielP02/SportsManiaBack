@@ -1,0 +1,25 @@
+package com.example.demo.controller;
+
+import com.example.demo.model.Pedido;
+import com.example.demo.dto.pedidoDTO.PedidoDTO;
+import com.example.demo.service.PedidoService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/api/pedidos")
+public class PedidoController {
+
+    @Autowired
+    private PedidoService pedidoService;
+
+    @GetMapping("/{id}")
+    public PedidoDTO getPedido(@PathVariable Long id) {
+        return pedidoService.getPedidoById(id);
+    }
+
+    @PostMapping
+    public Pedido criarPedido(@RequestBody Pedido pedido) {
+        return pedidoService.criarPedido(pedido);
+    }
+}
