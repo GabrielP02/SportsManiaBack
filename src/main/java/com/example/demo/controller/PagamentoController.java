@@ -37,22 +37,31 @@ public class PagamentoController {
             @RequestBody PagamentoRequestDTO request
     ) throws Exception {
         Carrinho carrinho = carrinhoService.findCarrinhoByPersonId(personId);
-        List<CarrinhoProduto> itens = carrinho.getItens();
+        List<CarrinhoProduto> itensCarrinho = carrinho.getItens();
         FreteSelecionadoDTO frete = request.getFrete();
 
-        // 1. Gere a preferência do Mercado Pago e obtenha o Preference
-        Preference preference = pagamentoService.criarPreferencia(itens, frete);
+        // Crie cópias dos itens do carrinho para o pedido
+        List<CarrinhoProduto> itensPedido = itensCarrinho.stream().map(item -> {
+            CarrinhoProduto novoItem = new CarrinhoProduto();
+            novoItem.setProduto(item.getProduto());
+            novoItem.setQuantidade(item.getQuantidade());
+            // Não associe o carrinho aqui!
+            return novoItem;
+        }).collect(Collectors.toList());
 
-        // 2. Crie o pedido no banco
+        // Gere a preferência do Mercado Pago
+        Preference preference = pagamentoService.criarPreferencia(itensCarrinho, frete);
+
+        // Crie o pedido no banco
         Pedido pedido = new Pedido();
-        pedido.setItens(itens);
+        pedido.setItens(itensPedido);
         pedido.setStatus("AGUARDANDO_PAGAMENTO");
         pedido.setMercadoPagoPreferenceId(preference.getId());
         // Defina outros campos do pedido, como clienteEmail, se necessário
 
         pedido = pedidoService.criarPedido(pedido);
 
-        // 3. Retorne o id do pedido e o link de pagamento
+        // Retorne o id do pedido e o link de pagamento
         Map<String, Object> resposta = new HashMap<>();
         resposta.put("pedidoId", pedido.getId());
         resposta.put("init_point", preference.getInitPoint());
