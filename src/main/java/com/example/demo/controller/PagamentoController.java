@@ -49,16 +49,15 @@ public class PagamentoController {
             return novoItem;
         }).collect(Collectors.toList());
 
-        // Gere a preferência do Mercado Pago
-        Preference preference = pagamentoService.criarPreferencia(itensCarrinho, frete);
-
-        // Crie o pedido no banco
         Pedido pedido = new Pedido();
         pedido.setItens(itensPedido);
         pedido.setStatus("AGUARDANDO_PAGAMENTO");
-        pedido.setMercadoPagoPreferenceId(preference.getId());
         // Defina outros campos do pedido, como clienteEmail, se necessário
 
+        // Gere a preferência do Mercado Pago
+        Preference preference = pagamentoService.criarPreferencia(itensCarrinho, frete);
+
+        pedido.setMercadoPagoPreferenceId(preference.getId());
         pedido = pedidoService.criarPedido(pedido);
 
         // Retorne o id do pedido e o link de pagamento

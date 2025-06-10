@@ -6,6 +6,7 @@ import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.model.Carrinho;
 import com.example.demo.model.CarrinhoProduto;
 import com.example.demo.model.Pedido;
+import com.example.demo.model.PedidoItem;
 import com.example.demo.service.CarrinhoService;
 import com.example.demo.service.PedidoService;
 
@@ -61,11 +62,10 @@ public class CarrinhoController {
     public ResponseEntity<Carrinho> finalizarCompra(@PathVariable Long personId) throws ResourceNotFoundException {
         Carrinho carrinho = carrinhoService.finalizarCompra(personId);
         List<CarrinhoProduto> itensCarrinho = carrinho.getItens();
-        List<CarrinhoProduto> itensPedido = itensCarrinho.stream().map(item -> {
-            CarrinhoProduto novoItem = new CarrinhoProduto();
+        List<PedidoItem> itensPedido = carrinho.getItens().stream().map(item -> {
+            PedidoItem novoItem = new PedidoItem();
             novoItem.setProduto(item.getProduto());
             novoItem.setQuantidade(item.getQuantidade());
-            // Não set carrinho aqui!
             return novoItem;
         }).collect(Collectors.toList());
 
