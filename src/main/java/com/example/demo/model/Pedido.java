@@ -19,6 +19,7 @@ public class Pedido {
     private String mercadoPagoPreferenceId;
 
     @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "pedido_id") // Adiciona coluna de referência no CarrinhoProduto
     private List<CarrinhoProduto> itens;
 
     
