@@ -4,7 +4,10 @@ import com.example.demo.dto.carrinhoDTO.CarrinhoResponseDTO;
 import com.example.demo.dto.carrinhoDTO.QuantidadeDTO;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.model.Carrinho;
+import com.example.demo.model.CarrinhoProduto;
+import com.example.demo.model.Pedido;
 import com.example.demo.service.CarrinhoService;
+import com.example.demo.service.PedidoService;
 
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
@@ -22,6 +25,9 @@ public class CarrinhoController {
 
     @Autowired
     private CarrinhoService carrinhoService;
+
+    @Autowired
+    private PedidoService pedidoService;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -54,6 +60,21 @@ public class CarrinhoController {
     @PostMapping("/person/{personId}/finalizar")
     public ResponseEntity<Carrinho> finalizarCompra(@PathVariable Long personId) throws ResourceNotFoundException {
         Carrinho carrinho = carrinhoService.finalizarCompra(personId);
+        List<CarrinhoProduto> itensCarrinho = carrinho.getItens();
+        List<CarrinhoProduto> itensPedido = itensCarrinho.stream().map(item -> {
+            CarrinhoProduto novoItem = new CarrinhoProduto();
+            novoItem.setProduto(item.getProduto());
+            novoItem.setQuantidade(item.getQuantidade());
+            // Não set carrinho aqui!
+            return novoItem;
+        }).collect(Collectors.toList());
+
+        Pedido pedido = new Pedido();
+        pedido.setItens(itensPedido);
+        pedido.setStatus("AGUARDANDO_PAGAMENTO");
+        //pedido.setMercadoPagoPreferenceId(preference.getId());
+        // ...outros campos...
+        pedido = pedidoService.criarPedido(pedido);
         return ResponseEntity.ok(carrinho);
     }
 
