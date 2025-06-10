@@ -11,5 +11,13 @@ public class PedidoDTO {
     private String status;
     private String clienteEmail;
     private List<CarrinhoProduto> itens;
+    private String mercadoPagoPreferenceId;
 
+    public String getMercadoPagoPreferenceId() {
+        return mercadoPagoPreferenceId;
+    }
+
+    public void setMercadoPagoPreferenceId(String mercadoPagoPreferenceId) {
+        this.mercadoPagoPreferenceId = mercadoPagoPreferenceId;
+    }
 }

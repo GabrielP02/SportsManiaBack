@@ -25,7 +25,7 @@ public class PagamentoService {
     @Value("${mercadopago.access.token}")
     private String accessToken;
 
-    public String criarPreferencia(List<CarrinhoProduto> itens, FreteSelecionadoDTO frete) throws MPException, MPApiException {
+    public Preference criarPreferencia(List<CarrinhoProduto> itens, FreteSelecionadoDTO frete) throws MPException, MPApiException {
         // Configura o access token do Mercado Pago
         MercadoPagoConfig.setAccessToken(accessToken);
 
@@ -74,12 +74,7 @@ public class PagamentoService {
 
         // Cria a preferência usando o client do SDK novo
         PreferenceClient client = new PreferenceClient();
-        try {
-            Preference preference = client.create(request);
-            return preference.getInitPoint();
-        } catch (MPApiException e) {
-            System.out.println("Erro Mercado Pago: " + e.getApiResponse().getContent());
-            throw e;
-        }
+        Preference preference = client.create(request); // <--- aqui estava o erro
+        return preference;
     }
 }
