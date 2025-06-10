@@ -5,6 +5,7 @@ import com.example.demo.dto.pagamentoDTO.PagamentoRequestDTO;
 import com.example.demo.model.Carrinho;
 import com.example.demo.model.CarrinhoProduto;
 import com.example.demo.model.Pedido;
+import com.example.demo.model.PedidoItem;
 import com.example.demo.service.CarrinhoService;
 import com.example.demo.service.PagamentoService;
 import com.example.demo.service.PedidoService;
@@ -40,12 +41,11 @@ public class PagamentoController {
         List<CarrinhoProduto> itensCarrinho = carrinho.getItens();
         FreteSelecionadoDTO frete = request.getFrete();
 
-        // Crie cópias dos itens do carrinho para o pedido
-        List<CarrinhoProduto> itensPedido = itensCarrinho.stream().map(item -> {
-            CarrinhoProduto novoItem = new CarrinhoProduto();
+        // Crie cópias dos itens do carrinho para o pedido como PedidoItem
+        List<PedidoItem> itensPedido = itensCarrinho.stream().map(item -> {
+            PedidoItem novoItem = new PedidoItem();
             novoItem.setProduto(item.getProduto());
             novoItem.setQuantidade(item.getQuantidade());
-            // Não associe o carrinho aqui!
             return novoItem;
         }).collect(Collectors.toList());
 
