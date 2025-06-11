@@ -47,4 +47,11 @@ public class PedidoService {
                 .map(pedido -> modelMapper.map(pedido, PedidoDTO.class))
                 .collect(Collectors.toList());
     }
+
+    public List<PedidoDTO> getPedidosByPersonId(Long personId) {
+        List<Pedido> pedidos = pedidoRepository.findByPersonId(personId);
+        return pedidos.stream()
+                .map(pedido -> modelMapper.map(pedido, PedidoDTO.class))
+                .collect(Collectors.toList());
+    }
 }

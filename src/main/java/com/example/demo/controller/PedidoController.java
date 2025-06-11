@@ -29,4 +29,9 @@ public class PedidoController {
     public List<PedidoDTO> getAllPedidos() {
         return pedidoService.getAllPedidos();
     }
+
+    @GetMapping("/usuario/{personId}")
+    public List<PedidoDTO> getPedidosByUsuario(@PathVariable Long personId) {
+        return pedidoService.getPedidosByPersonId(personId);
+    }
 }

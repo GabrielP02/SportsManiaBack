@@ -22,5 +22,7 @@ public class Pedido {
     @JoinColumn(name = "pedido_id")
     private List<PedidoItem> itens;
 
-    
+    @ManyToOne
+    @JoinColumn(name = "person_id")
+    private Person person;
 }
