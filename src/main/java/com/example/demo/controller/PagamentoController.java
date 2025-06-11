@@ -49,11 +49,13 @@ public class PagamentoController {
             return novoItem;
         }).collect(Collectors.toList());
 
+        Preference preference = pagamentoService.criarPreferencia(itensCarrinho, frete);
+
         Pedido pedido = new Pedido();
         pedido.setItens(itensPedido);
         pedido.setStatus("AGUARDANDO_PAGAMENTO");
         pedido.setMercadoPagoPreferenceId(preference.getId());
-        pedido.setPerson(carrinho.getPerson()); // <-- Associe o usuário ao pedido
+        pedido.setPerson(carrinho.getPerson());
         pedido = pedidoService.criarPedido(pedido);
 
         // Retorne o id do pedido e o link de pagamento
