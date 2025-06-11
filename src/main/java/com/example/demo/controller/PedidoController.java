@@ -6,6 +6,8 @@ import com.example.demo.service.PedidoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/pedidos")
 public class PedidoController {
@@ -21,5 +23,10 @@ public class PedidoController {
     @PostMapping
     public Pedido criarPedido(@RequestBody Pedido pedido) {
         return pedidoService.criarPedido(pedido);
+    }
+
+    @GetMapping
+    public List<PedidoDTO> getAllPedidos() {
+        return pedidoService.getAllPedidos();
     }
 }
