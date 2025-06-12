@@ -32,10 +32,9 @@ public class MercadoPagoWebhookController {
             @RequestHeader(value = "x-signature", required = false) String signatureHeader
     ) {
         try {
-            // Validação da assinatura
-            if (signatureHeader == null || !validarAssinatura(payload, signatureHeader, webhookSecret)) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Assinatura inválida");
-            }
+            // if (signatureHeader == null || !validarAssinatura(payload, signatureHeader, webhookSecret)) {
+            //     return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Assinatura inválida");
+            // }
 
             JSONObject json = new JSONObject(payload);
 
