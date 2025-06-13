@@ -48,8 +48,11 @@ public class MercadoPagoWebhookController {
                 String paymentResponse = restTemplate.getForObject(url, String.class);
                 JSONObject paymentJson = new JSONObject(paymentResponse);
 
+                System.out.println("Resposta do Mercado Pago: " + paymentJson.toString());
+
                 String status = paymentJson.optString("status");
                 String preferenceId = paymentJson.optString("preference_id");
+                System.out.println("preference_id retornado: " + preferenceId);
 
                 System.out.println("Status do pagamento: " + status + ", preferenceId: " + preferenceId);
 
