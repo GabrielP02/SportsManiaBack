@@ -68,8 +68,9 @@ public class PagamentoService {
         PreferenceRequest request = PreferenceRequest.builder()
             .items(items)
             .backUrls(backUrls)
-            .paymentMethods(paymentMethods) // <-- adicione esta linha
+            .paymentMethods(paymentMethods)
             .autoReturn("approved")
+            .notificationUrl("https://sportsmaniaback.onrender.com/api/pagamento/webhook") // <-- Adicione esta linha
             .build();
 
         // Cria a preferência usando o client do SDK novo
