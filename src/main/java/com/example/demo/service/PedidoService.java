@@ -36,8 +36,12 @@ public class PedidoService {
     public void atualizarStatusPorPreferenceId(String preferenceId, String novoStatus) {
         Pedido pedido = pedidoRepository.findByMercadoPagoPreferenceId(preferenceId);
         if (pedido != null) {
+            System.out.println("Pedido encontrado! ID: " + pedido.getId() + ", Status atual: " + pedido.getStatus());
             pedido.setStatus(novoStatus);
             pedidoRepository.save(pedido);
+            System.out.println("Status atualizado para: " + novoStatus);
+        } else {
+            System.out.println("Pedido NÃO encontrado para preferenceId: " + preferenceId);
         }
     }
 

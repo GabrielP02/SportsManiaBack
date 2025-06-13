@@ -32,15 +32,15 @@ public class MercadoPagoWebhookController {
             @RequestHeader(value = "x-signature", required = false) String signatureHeader
     ) {
         try {
-            // if (signatureHeader == null || !validarAssinatura(payload, signatureHeader, webhookSecret)) {
-            //     return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Assinatura inválida");
-            // }
+            System.out.println("Webhook recebido! Payload: " + payload);
 
             JSONObject json = new JSONObject(payload);
 
             String type = json.optString("type");
             JSONObject data = json.optJSONObject("data");
             String paymentId = data != null ? data.optString("id") : null;
+
+            System.out.println("Tipo: " + type + ", paymentId: " + paymentId);
 
             if ("payment".equals(type) && paymentId != null) {
                 String url = "https://api.mercadopago.com/v1/payments/" + paymentId + "?access_token=" + accessToken;
@@ -50,6 +50,8 @@ public class MercadoPagoWebhookController {
 
                 String status = paymentJson.optString("status");
                 String preferenceId = paymentJson.optString("preference_id");
+
+                System.out.println("Status do pagamento: " + status + ", preferenceId: " + preferenceId);
 
                 if (preferenceId != null) {
                     String novoStatus;
@@ -66,12 +68,14 @@ public class MercadoPagoWebhookController {
                         default:
                             novoStatus = "DESCONHECIDO";
                     }
+                    System.out.println("Atualizando pedido para status: " + novoStatus);
                     pedidoService.atualizarStatusPorPreferenceId(preferenceId, novoStatus);
                 }
             }
 
             return ResponseEntity.ok("OK");
         } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao processar webhook");
         }
     }
