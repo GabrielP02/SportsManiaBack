@@ -114,7 +114,11 @@ public class CarrinhoController {
     // Remover todos os produtos do carrinho pelo ID do carrinho
     @DeleteMapping("/{carrinhoId}/produtos")
     public ResponseEntity<Void> deletarTodosProdutosDoCarrinho(@PathVariable Long carrinhoId) {
-        carrinhoService.deletarTodosProdutosDoCarrinho(carrinhoId);
-        return ResponseEntity.noContent().build();
+        try {
+            carrinhoService.deletarTodosProdutosDoCarrinho(carrinhoId);
+            return ResponseEntity.noContent().build();
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 }
