@@ -49,14 +49,19 @@ public class PagamentoController {
             return novoItem;
         }).collect(Collectors.toList());
 
+        // Crie o pedido e salve para obter o ID
         Pedido pedido = new Pedido();
-        Preference preference = pagamentoService.criarPreferencia(itensCarrinho, frete, pedido.getId());
-
         pedido.setItens(itensPedido);
         pedido.setStatus("AGUARDANDO_PAGAMENTO");
-        pedido.setMercadoPagoPreferenceId(preference.getId());
         pedido.setPerson(carrinho.getPerson());
-        pedido = pedidoService.criarPedido(pedido);
+        pedido = pedidoService.criarPedido(pedido); // Agora pedido.getId() existe!
+
+        // Crie a preferência usando o ID do pedido
+        Preference preference = pagamentoService.criarPreferencia(itensCarrinho, frete, pedido.getId());
+
+        // Atualize o pedido com o preferenceId do Mercado Pago
+        pedido.setMercadoPagoPreferenceId(preference.getId());
+    
 
         // Retorne o id do pedido e o link de pagamento
         Map<String, Object> resposta = new HashMap<>();
