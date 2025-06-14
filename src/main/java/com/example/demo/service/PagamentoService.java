@@ -25,7 +25,7 @@ public class PagamentoService {
     @Value("${mercadopago.access.token}")
     private String accessToken;
 
-    public Preference criarPreferencia(List<CarrinhoProduto> itens, FreteSelecionadoDTO frete) throws MPException, MPApiException {
+    public Preference criarPreferencia(List<CarrinhoProduto> itens, FreteSelecionadoDTO frete, Long pedidoId) throws MPException, MPApiException {
         // Configura o access token do Mercado Pago
         MercadoPagoConfig.setAccessToken(accessToken);
 
@@ -60,8 +60,8 @@ public class PagamentoService {
         PreferencePaymentMethodsRequest paymentMethods = PreferencePaymentMethodsRequest.builder()
             .excludedPaymentTypes(List.of()) // Não exclui nenhum tipo
             .excludedPaymentMethods(List.of()) // Não exclui nenhum método
-            .installments(12) // Máximo de parcelas, ajuste se quiser
-            .defaultPaymentMethodId("pix") // Opcional: destaca Pix como padrão
+            .installments(12) // Máximo de parcelas,
+            .defaultPaymentMethodId("pix")
             .build();
 
         // Monta a requisição da preferência
@@ -70,12 +70,13 @@ public class PagamentoService {
             .backUrls(backUrls)
             .paymentMethods(paymentMethods)
             .autoReturn("approved")
-            .notificationUrl("https://sportsmaniaback.onrender.com/api/pagamento/webhook") // <-- Adicione esta linha
+            .notificationUrl("https://sportsmaniaback.onrender.com/api/pagamento/webhook")
+            .externalReference(String.valueOf(pedidoId))
             .build();
 
         // Cria a preferência usando o client do SDK novo
         PreferenceClient client = new PreferenceClient();
-        Preference preference = client.create(request); // <--- aqui estava o erro
+        Preference preference = client.create(request);
         return preference;
     }
 }
