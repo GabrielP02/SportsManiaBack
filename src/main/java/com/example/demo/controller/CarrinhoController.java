@@ -111,4 +111,10 @@ public class CarrinhoController {
         return ResponseEntity.ok().build();
     }
 
+    // Remover todos os produtos do carrinho pelo ID do carrinho
+    @DeleteMapping("/{carrinhoId}/produtos")
+    public ResponseEntity<Void> deletarTodosProdutosDoCarrinho(@PathVariable Long carrinhoId) {
+        carrinhoService.deletarTodosProdutosDoCarrinho(carrinhoId);
+        return ResponseEntity.noContent().build();
+    }
 }

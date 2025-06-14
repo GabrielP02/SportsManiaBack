@@ -127,4 +127,11 @@ public class CarrinhoService {
             carrinho.getPerson()
         );
     }
+
+    public void deletarTodosProdutosDoCarrinho(Long carrinhoId) throws ResourceNotFoundException {
+        Carrinho carrinho = carrinhoRepository.findById(carrinhoId)
+            .orElseThrow(() -> new ResourceNotFoundException("Carrinho não encontrado"));
+        carrinho.getItens().clear();
+        carrinhoRepository.save(carrinho);
+    }
 }
