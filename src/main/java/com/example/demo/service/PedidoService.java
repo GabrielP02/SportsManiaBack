@@ -69,4 +69,8 @@ public class PedidoService {
                 .map(pedido -> modelMapper.map(pedido, PedidoDTO.class))
                 .collect(Collectors.toList());
     }
+
+    public void deletarPedido(Long pedidoId) {
+        pedidoRepository.deleteById(pedidoId);
+    }
 }

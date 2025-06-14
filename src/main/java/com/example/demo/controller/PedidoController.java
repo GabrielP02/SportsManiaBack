@@ -4,6 +4,7 @@ import com.example.demo.model.Pedido;
 import com.example.demo.dto.pedidoDTO.PedidoDTO;
 import com.example.demo.service.PedidoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -33,5 +34,11 @@ public class PedidoController {
     @GetMapping("/usuario/{personId}")
     public List<PedidoDTO> getPedidosByUsuario(@PathVariable Long personId) {
         return pedidoService.getPedidosByPersonId(personId);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletarPedido(@PathVariable Long id) {
+        pedidoService.deletarPedido(id);
+        return ResponseEntity.noContent().build();
     }
 }
