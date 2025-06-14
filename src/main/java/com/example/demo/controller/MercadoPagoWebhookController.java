@@ -51,28 +51,34 @@ public class MercadoPagoWebhookController {
                 System.out.println("Resposta do Mercado Pago: " + paymentJson.toString());
 
                 String status = paymentJson.optString("status");
+                String novoStatus;
+                switch (status) {
+                    case "approved":
+                        novoStatus = "PAGO";
+                        break;
+                    case "pending":
+                        novoStatus = "AGUARDANDO_PAGAMENTO";
+                        break;
+                    case "rejected":
+                        novoStatus = "PAGAMENTO_REJEITADO";
+                        break;
+                    default:
+                        novoStatus = "DESCONHECIDO";
+                }
                 String preferenceId = paymentJson.optString("preference_id");
+                String externalReference = paymentJson.optString("external_reference");
                 System.out.println("preference_id retornado: " + preferenceId);
+                System.out.println("external_reference retornado: " + externalReference);
 
                 System.out.println("Status do pagamento: " + status + ", preferenceId: " + preferenceId);
 
                 if (preferenceId != null) {
-                    String novoStatus;
-                    switch (status) {
-                        case "approved":
-                            novoStatus = "PAGO";
-                            break;
-                        case "pending":
-                            novoStatus = "AGUARDANDO_PAGAMENTO";
-                            break;
-                        case "rejected":
-                            novoStatus = "PAGAMENTO_REJEITADO";
-                            break;
-                        default:
-                            novoStatus = "DESCONHECIDO";
-                    }
                     System.out.println("Atualizando pedido para status: " + novoStatus);
                     pedidoService.atualizarStatusPorPreferenceId(preferenceId, novoStatus);
+                }
+                if (externalReference != null && !externalReference.isEmpty()) {
+                    Long pedidoId = Long.valueOf(externalReference);
+                    pedidoService.atualizarStatusPorPedidoId(pedidoId, novoStatus);
                 }
             }
 

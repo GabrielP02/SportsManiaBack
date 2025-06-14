@@ -45,6 +45,17 @@ public class PedidoService {
         }
     }
 
+    public void atualizarStatusPorPedidoId(Long pedidoId, String novoStatus) {
+        Pedido pedido = pedidoRepository.findById(pedidoId).orElse(null);
+        if (pedido != null) {
+            pedido.setStatus(novoStatus);
+            pedidoRepository.save(pedido);
+            System.out.println("Status do pedido atualizado para: " + novoStatus);
+        } else {
+            System.out.println("Pedido NÃO encontrado para id: " + pedidoId);
+        }
+    }
+
     public List<PedidoDTO> getAllPedidos() {
         List<Pedido> pedidos = pedidoRepository.findAll();
         return pedidos.stream()
