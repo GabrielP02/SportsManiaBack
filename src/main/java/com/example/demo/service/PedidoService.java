@@ -6,7 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.demo.dto.pedidoDTO.PedidoDTO;
 import com.example.demo.model.Pedido;
+import com.example.demo.model.PedidoItem;
+import com.example.demo.model.Produto;
 import com.example.demo.repository.PedidoRepository;
+import com.example.demo.repository.ProdutoRepository;
 import org.modelmapper.ModelMapper;
 
 @Service
@@ -14,6 +17,9 @@ public class PedidoService {
 
     @Autowired
     private PedidoRepository pedidoRepository;
+
+    @Autowired
+    private ProdutoRepository produtoRepository;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -50,7 +56,16 @@ public class PedidoService {
         if (pedido != null) {
             pedido.setStatus(novoStatus);
             pedidoRepository.save(pedido);
-            System.out.println("Status do pedido atualizado para: " + novoStatus);
+
+            // Se o status for PAGO, diminua o estoque dos produtos
+            if ("PAGO".equalsIgnoreCase(novoStatus)) {
+                for (PedidoItem item : pedido.getItens()) {
+                    Produto produto = item.getProduto();
+                    int novaQuantidade = produto.getQuantidade() - item.getQuantidade();
+                    produto.setQuantidade(Math.max(novaQuantidade, 0));
+                    produtoRepository.save(produto);
+                }
+            }
         } else {
             System.out.println("Pedido NÃO encontrado para id: " + pedidoId);
         }
