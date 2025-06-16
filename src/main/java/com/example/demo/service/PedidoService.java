@@ -103,7 +103,7 @@ public class PedidoService {
         }
 
         SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo("araujopereirag@gmail.com");
+        message.setTo("mosquetesteg@gmail.com");
         message.setSubject("Novo pedido pago #" + pedido.getId());
         message.setText(conteudo.toString());
 
