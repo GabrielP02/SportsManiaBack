@@ -3,6 +3,8 @@ package com.example.demo.service;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import com.example.demo.dto.pedidoDTO.PedidoDTO;
 import com.example.demo.model.Pedido;
@@ -17,6 +19,9 @@ public class PedidoService {
 
     @Autowired
     private PedidoRepository pedidoRepository;
+
+    @Autowired
+    private JavaMailSender mailSender;
 
     @Autowired
     private ProdutoRepository produtoRepository;
@@ -57,18 +62,51 @@ public class PedidoService {
             pedido.setStatus(novoStatus);
             pedidoRepository.save(pedido);
 
-            // Se o status for PAGO, diminua o estoque dos produtos
+            // Se o status for PAGO, atualiza o estoque e envia o e-mail
             if ("PAGO".equalsIgnoreCase(novoStatus)) {
+                // Atualiza o estoque dos produtos
                 for (PedidoItem item : pedido.getItens()) {
                     Produto produto = item.getProduto();
                     int novaQuantidade = produto.getQuantidade() - item.getQuantidade();
-                    produto.setQuantidade(Math.max(novaQuantidade, 0));
+                    produto.setQuantidade(Math.max(novaQuantidade, 0)); // Evita estoque negativo
                     produtoRepository.save(produto);
                 }
+                // Envia o e-mail para o dono da loja
+                enviarEmailParaLoja(pedido);
             }
         } else {
             System.out.println("Pedido NÃO encontrado para id: " + pedidoId);
         }
+    }
+
+    private void enviarEmailParaLoja(Pedido pedido) {
+        StringBuilder conteudo = new StringBuilder();
+        conteudo.append("Novo pedido pago!\n\n");
+        conteudo.append("Cliente: ").append(pedido.getPerson().getUsername()).append("\n");
+        conteudo.append("E-mail: ").append(pedido.getPerson().getEmail()).append("\n");
+        conteudo.append("Endereço de entrega:\n");
+        conteudo.append("Rua: ").append(pedido.getPerson().getRua()).append(", ")
+                .append("Número: ").append(pedido.getPerson().getNumero()).append("\n");
+        conteudo.append("Bairro: ").append(pedido.getPerson().getBairro()).append("\n");
+        conteudo.append("Cidade: ").append(pedido.getPerson().getCidade()).append("/")
+                .append(pedido.getPerson().getUf()).append("\n");
+        conteudo.append("CEP: ").append(pedido.getPerson().getCep()).append("\n\n");
+
+        conteudo.append("Itens comprados:\n");
+        for (PedidoItem item : pedido.getItens()) {
+            conteudo.append("- ")
+                .append(item.getProduto().getNome())
+                .append(" | Qtd: ").append(item.getQuantidade())
+                .append(" | Valor: R$ ").append(item.getProduto().getPreco())
+                .append("\n");
+        }
+
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo("araujopereirag@gmail.com");
+        message.setSubject("Novo pedido pago #" + pedido.getId());
+        message.setText(conteudo.toString());
+
+        mailSender.send(message);
     }
 
     public List<PedidoDTO> getAllPedidos() {
